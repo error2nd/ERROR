@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ERROR VIP HACK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-dark: #1A1A2E;
+            --bg-dark-light: #24243D;
+            --primary-color: #6A5ACD;
+            --accent-color: #8A2BE2;
+            --text-light: #f0f0f0;
+            --text-muted: #B0B0B0;
+            --card-bg: #2C2C4A;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --glow-color: rgba(138, 43, 226, 0.6);
+            --win-color: #33ff88;
+            --loss-color: #ff5c5c;
+            --pending-color: #ffa500;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 10;
+            animation: fadeInScaleUp 0.8s ease-out forwards;
+        }
+        @keyframes fadeInScaleUp {
+            from { opacity: 0; transform: scale(0.9) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .login-box {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px var(--shadow-color);
+            padding: 45px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .title { font-family: 'Orbitron', sans-serif; font-size: 2.6em; color: var(--accent-color); }
+        .subtitle { font-size: 1.05em; color: var(--text-muted); margin-bottom: 35px; }
+        .input-group { margin-bottom: 30px; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+        input[type="password"] {
+            width: 100%; padding: 16px 20px; border: 1px solid var(--border-color); border-radius: 10px;
+            background: var(--bg-dark-light); color: var(--text-light); font-size: 1.15em; box-sizing: border-box;
+        }
+        input[type="password"]:focus {
+            border-color: var(--accent-color); box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.25); outline: none;
+        }
+        .btn {
+            display: block; width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 1.1em;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; color: var(--text-light);
+        }
+        .btn-login { background: var(--primary-color); box-shadow: 0 8px 15px rgba(106, 90, 205, 0.2); }
+        .btn-login:hover { background: var(--accent-color); transform: translateY(-2px); }
+        .btn-telegram {
+            display: inline-flex; justify-content: center; align-items: center; gap: 10px;
+            background: #0088cc; color: var(--text-light); padding: 10px 20px; font-size: 0.95em;
+            box-shadow: 0 6px 15px rgba(0, 136, 204, 0.3); margin-top: 20px; border-radius: 10px;
+            width: auto;
+        }
+        .btn-telegram:hover { background: #006699; transform: translateY(-2px); }
+        .divider { margin: 25px 0; display: flex; align-items: center; color: var(--text-muted); }
+        .divider::before, .divider::after { content: ''; flex-grow: 1; height: 1px; background-color: var(--border-color); }
+        .divider span { padding: 0 15px; }
+        .footer-text { font-size: 0.8em; color: var(--text-muted); margin-top: 35px; }
+        .login-message { margin-top: 15px; font-size: 0.9em; color: var(--loss-color); }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-align: center;
+            padding: 20px 0;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .header-text { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
+        .main-container {
+            width: 100vw;
+            max-width: 450px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: var(--bg-dark);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        .app-content {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: var(--bg-dark);
+            transition: transform 0.4s ease-in-out;
+            transform: translateX(100%);
+            display: flex;
+            flex-direction: column;
+        }
+        .page-section.active {
+            transform: translateX(0);
+        }
+        #home.page-section { z-index: 2; }
+        #history.page-section { z-index: 1; }
+        .home-content, .history-content-wrapper {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .info-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px var(--shadow-color);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .info-card-title {
+            font-size: 0.9em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .info-card-value {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .real-time-analysis-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px var(--shadow-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .stats-card {
+            background-color: var(--bg-dark-light);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .stats-card i { font-size: 1.2em; color: var(--accent-color); }
+        .stats-card span:first-child { color: var(--text-muted); font-size: 0.9em; }
+        .stats-card span:last-child { font-weight: 600; color: var(--primary-color); font-size: 1.1em; }
+
+        .section-title { font-size: 1.2em; font-weight: 600; margin-bottom: 15px; }
+        .nav-buttons { display: flex; justify-content: center; gap: 10px; padding: 10px; background-color: var(--bg-dark-light); }
+        .nav-buttons button {
+            background: var(--primary-color); color: var(--text-light); padding: 10px 15px; border-radius: 8px;
+            border: none; font-size: 14px; text-align: center; cursor: pointer; transition: background-color 0.3s ease;
+        }
+        .nav-buttons button.active { background: var(--accent-color); }
+
+        .history-card {
+            margin-top: 10px; padding: 15px; font-size: 14px; position: relative; border-radius: 8px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        .history-card.win { background-color: rgba(51, 255, 136, 0.1); border-color: var(--win-color); }
+        .history-card.loss { background-color: rgba(255, 92, 92, 0.1); border-color: var(--loss-color); }
+        .history-card.pending { background-color: rgba(255, 165, 0, 0.1); border-color: var(--pending-color); }
+        .history-content { display: flex; flex-direction: column; gap: 8px; }
+        .history-content span { display: flex; align-items: center; gap: 8px; }
+        .history-content i { font-size: 18px; color: var(--accent-color); }
+
+        .history-scroll-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-right: 10px;
+        }
+        .history-scroll-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .history-scroll-container::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 4px;
+        }
+        .history-scroll-container::-webkit-scrollbar-track {
+            background-color: var(--bg-dark-light);
+        }
+
+        .clear-btn { background: var(--loss-color); color: var(--text-light); border: none; padding: 8px 15px; margin-top: 15px; }
+        .clear-btn:hover { background: #c82333; }
+
+        .win-trophy, .loss-signal, .pending-spinner { display: inline-block; }
+        .win-trophy::before { content: '\f091'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--win-color); animation: bounce 2s infinite; }
+        .loss-signal::before { content: '\f1e2'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--loss-color); animation: shake 0.5s infinite; }
+        .pending-spinner::before { content: '\f110'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--pending-color); animation: spin 1s linear infinite; }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .notification {
+            position: fixed; top: 10px; left: 50%; transform: translateX(-50%); padding: 10px 20px;
+            border-radius: 8px; font-weight: bold; color: var(--text-light); z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: fadeInOut 3s ease-in-out forwards;
+        }
+        .notification.win { background-color: var(--win-color); }
+        .notification.loss { background-color: var(--loss-color); }
+        @keyframes fadeInOut { 0% { opacity: 0; transform: translate(-50%, -20px); } 10% { opacity: 1; transform: translate(-50%, 0); } 90% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -20px); } }
+
+        .win-streak-badge {
+            position: fixed; top: 15px; right: 15px; background: linear-gradient(45deg, #ff6a00, #ff0080);
+            color: var(--text-light); padding: 8px 15px; font-size: 14px; font-weight: bold;
+            border-radius: 8px; box-shadow: 0 0 10px #ff4081; animation: popBadge 0.4s ease, glowPulse 1s infinite;
+            z-index: 9999;
+        }
+        @keyframes popBadge { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes glowPulse { 0%, 100% { box-shadow: 0 0 10px #ff4081; } 50% { box-shadow: 0 0 15px #fff; } }
+
+        .confetti-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999;
+            pointer-events: none; opacity: 0; transition: opacity 0.5s;
+        }
+        .confetti-overlay.active { opacity: 1; }
+
+        .blast-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, var(--loss-color) 0%, rgba(255, 255, 0, 0) 70%);
+            opacity: 0; transition: opacity 0.5s; z-index: 998;
+            pointer-events: none; animation: blast-pulse 0.5s ease-out 2;
+        }
+        .blast-overlay.active { animation: blast-pulse 0.5s ease-out 2; }
+        @keyframes blast-pulse {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 450px) {
+            .main-container {
+                width: 100vw;
+                height: 100vh;
+                max-width: 100%;
+            }
+            .page-section {
+                padding: 10px;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .history-content-wrapper {
+                height: auto;
+                max-height: calc(100vh - 150px);
+                overflow-y: auto;
+            }
+            .history-section {
+                padding: 10px;
+            }
+            .history-scroll-container {
+                max-height: none;
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 46, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .loading-box {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .loading-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+        .progress-bar {
+            width: 200px;
+            height: 10px;
+            background: var(--bg-dark-light);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0;
+            transition: width 3s linear;
+        }
+        
+        .trend-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+        .trend-good {
+            background-color: var(--win-color);
+            box-shadow: 0 0 5px var(--win-color);
+        }
+        .trend-sure-shot {
+            background-color: var(--win-color);
+            box-shadow: 0 0 8px var(--win-color);
+        }
+        .trend-worst {
+            background-color: var(--loss-color);
+            box-shadow: 0 0 5px var(--loss-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-page" class="login-container">
+        <div class="login-box">
+            <h1 class="title">𝗘𝗥𝗥𝗢𝗥 𝗪𝗘𝗕</h1>
+            <p class="subtitle">Enter your login key to proceed.</p>
+
+            <form class="login-form">
+                <div class="input-group">
+                    <label for="loginKey" class="sr-only">Login Key</label>
+                    <input type="password" id="loginKey" placeholder="Enter Login Key" required>
+                </div>
+
+                <button type="submit" class="btn btn-login">Login</button>
+                <div id="login-message" class="login-message"></div>
+            </form>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <a href="https://t.me/ERROR_2ND" class="btn btn-telegram" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-telegram-plane telegram-icon"></i> DM TO BUY
+            </a>
+
+            <p class="footer-text">
+                MOD BY ERROR_2ND
+            </p>
+        </div>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-box">
+            <div class="loading-text">CONNECTING TO SERVER</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-page" class="hidden">
+        <div class="main-container">
+            <div class="header">
+                <div class="header-text">𝗘𝗥𝗥𝗢𝗥 𝗪𝗘𝗕</div>
+            </div>
+
+            <div class="nav-buttons">
+                <button id="home-btn" onclick="showPage('home')">
+                    <i class="fas fa-home"></i><br>Dashboard
+                </button>
+                <button id="history-btn" onclick="showPage('history')">
+                    <i class="fas fa-history"></i><br>History
+                </button>
+            </div>
+
+            <div class="app-content">
+                <div id="home" class="page-section active">
+                    <div class="home-content">
+                        <div class="info-grid">
+                            <div class="info-card">
+                                <span class="info-card-title"><i class="fas fa-calendar"></i> PERIOD</span>
+                                <span id="periodNumber" class="info-card-value">Loading...</span>
+                            </div>
+                            <div class="info-card">
+                                <span class="info-card-title"><i class="fas fa-clock"></i> TIME LEFT</span>
+                                <span id="timer" class="info-card-value">00:00</span>
+                            </div>
+                            <div class="info-card">
+                                <span class="info-card-title"><i class="fas fa-bullseye"></i> PREDICTION</span>
+                                <span id="currentPrediction" class="info-card-value">Waiting...</span>
+                            </div>
+                        </div>
+
+                        <div class="real-time-analysis-section">
+                            <div class="section-title">Real-Time Analysis</div>
+                            <div id="real-time-stats">
+                                <div class="stats-card">
+                                    <i class="fas fa-calculator"></i>
+                                    <span>Total Predictions</span>
+                                    <span class="value" id="totalPredictions">0</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-trophy"></i>
+                                    <span>Total Wins</span>
+                                    <span class="value" id="totalWins">0</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span>Total Losses</span>
+                                    <span class="value" id="totalLosses">0</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Win Rate</span>
+                                    <span class="value" id="winRate">0%</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-list-ol"></i>
+                                    <span>Total Numbers Win</span>
+                                    <span class="value" id="totalNumbersWin">0</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-fire"></i>
+                                    <span>Total Win Streak</span>
+                                    <span class="value" id="totalWinStreak">0</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-ban"></i>
+                                    <span>Total Loss Streak</span>
+                                    <span class="value" id="totalLossStreak">0</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-trend-up"></i>
+                                    <span>Current Trend</span>
+                                    <span class="value" id="currentTrend">N/A</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-sync"></i>
+                                    <span>Detected Patterns</span>
+                                    <span class="value" id="detectedPatterns">N/A</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Volatility</span>
+                                    <span class="value" id="volatility">N/A</span>
+                                </div>
+                                <div class="stats-card">
+                                    <i class="fas fa-chart-pie"></i>
+                                    <span>Trend Strength</span>
+                                    <span class="value" id="trendStrength">N/A</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="history" class="page-section">
+                    <div class="history-content-wrapper">
+                        <div class="history-section">
+                            <div class="section-title">Prediction History</div>
+                            <div id="historyBody" class="history-scroll-container"></div>
+                            <button class="clear-btn" onclick="clearHistory()">
+                                <i class="fas fa-trash-alt"></i> Clear History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="confetti-overlay" class="confetti-overlay"></div>
+    <div id="blast-overlay" class="blast-overlay"></div>
+    <div id="win-streak-badge" class="win-streak-badge hidden"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBG1ZPt3VMGIKuGflHdRecSZHx5puY99Xs",
+            authDomain: "error-57ad4.firebaseapp.com",
+            databaseURL: "https://error-57ad4-default-rtdb.firebaseio.com",
+            projectId: "error-57ad4",
+            storageBucket: "error-57ad4.appspot.com",
+            messagingSenderId: "445412492654",
+            appId: "1:445412492654:android:2e75c3341086e4eb9a6d7f"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const KEYS_DB_PATH = 'prediction-tool-keys';
+        const SERVER_STATUS_PATH = 'serverStatus';
+        const loginMessageElement = document.getElementById('login-message');
+
+        // Advanced Prediction Engine Configuration
+        const ADVANCED_CONFIG = {
+            TREND_WINDOW: 50,
+            VOLATILITY_THRESHOLD: 0.65,
+            WEIGHT_RECENT: 0.25,
+            WEIGHT_HISTORICAL: 0.2,
+            WEIGHT_LOGISTIC: 0.15,
+            WEIGHT_RANDOM_FOREST: 0.15,
+            WEIGHT_LSTM: 0.15,
+            WEIGHT_BAYESIAN: 0.05,
+            WEIGHT_PATTERN: 0.25,
+            MIN_CONFIDENCE: 0.85,
+            MARKOV_ORDER: 3,
+            PATTERN_WINDOW: 10,
+            ENTROPY_THRESHOLD: 0.75,
+            MONTE_CARLO_SIMS: 1000,
+            XGBOOST_BOOST: 1.5,
+            Q_LEARNING_RATE: 0.1,
+            Q_DISCOUNT_FACTOR: 0.9,
+        };
+
+        // Store historical data
+        let historicalData = {
+            bigsmall: [],
+            numbers: [],
+            colors: [],
+            volatility: [],
+            streaks: { win: 0, loss: 0 },
+            patterns: [],
+            totalNumbersWin: 0,
+            totalWinStreak: 0,
+            totalLossStreak: 0,
+        };
+
+        // Q-Learning state-action table
+        let qTable = {};
+
+        // Pattern database
+        const patternDatabase = {
+            sequence: Array.from({ length: 50 }, (_, i) => ({
+                id: `seq_${i}`,
+                pattern: generateSequencePattern(i),
+                confidence: 0.8 + Math.random() * 0.15,
+            })),
+            statistical: Array.from({ length: 50 }, (_, i) => ({
+                id: `stat_${i}`,
+                pattern: generateStatisticalPattern(i),
+                confidence: 0.75 + Math.random() * 0.2,
+            })),
+            temporal: Array.from({ length: 40 }, (_, i) => ({
+                id: `temp_${i}`,
+                pattern: generateTemporalPattern(i),
+                confidence: 0.7 + Math.random() * 0.25,
+            })),
+            number: Array.from({ length: 30 }, (_, i) => ({
+                id: `num_${i}`,
+                pattern: generateNumberPattern(i),
+                confidence: 0.8 + Math.random() * 0.15,
+            })),
+            hybrid: Array.from({ length: 30 }, (_, i) => ({
+                id: `hybrid_${i}`,
+                pattern: generateHybridPattern(i),
+                confidence: 0.85 + Math.random() * 0.1,
+            })),
+        };
+
+        function generateSequencePattern(index) {
+            const patterns = [
+                'BIG-BIG-SMALL', 'SMALL-SMALL-BIG', 'BIG-SMALL-BIG-SMALL',
+                'BIG-BIG-BIG', 'SMALL-SMALL-SMALL', 'BIG-SMALL-SMALL-BIG',
+                'BIG-BIG-SMALL-SMALL', 'SMALL-BIG-BIG-SMALL',
+            ];
+            return patterns[index % patterns.length];
+        }
+
+        function generateStatisticalPattern(index) {
+            const patterns = [
+                'high_volatility', 'low_volatility', 'increasing_mean', 'decreasing_mean',
+                'high_frequency_5-9', 'high_frequency_0-4', 'odd_dominant', 'even_dominant',
+                'high_kurtosis', 'low_kurtosis',
+            ];
+            return patterns[index % patterns.length];
+        }
+
+        function generateTemporalPattern(index) {
+            const patterns = [
+                'minute_0-15_BIG', 'minute_15-30_SMALL', 'hour_0-6_BIG', 'hour_6-12_SMALL',
+                'day_monday_BIG', 'day_tuesday_SMALL',
+            ];
+            return patterns[index % patterns.length];
+        }
+
+        function generateNumberPattern(index) {
+            const patterns = [
+                'consecutive_1-3', 'consecutive_5-7', 'odd_sequence', 'even_sequence',
+                'sum_high', 'sum_low', 'same_color_green', 'same_color_red',
+            ];
+            return patterns[index % patterns.length];
+        }
+
+        function generateHybridPattern(index) {
+            const patterns = [
+                'BIG-high_volatility-minute_0-15', 'SMALL-low_volatility-hour_6-12',
+                'BIG-consecutive_5-7', 'SMALL-odd_sequence',
+            ];
+            return patterns[index % patterns.length];
+        }
+
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = 'device_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
+
+        function showLogin() {
+            document.getElementById('login-page').classList.remove('hidden');
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
+
+        function showMain() {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('main-page').classList.remove('hidden');
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
+
+        function showLoading() {
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            const progressBar = document.getElementById('progress-fill');
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 50);
+            setTimeout(() => {
+                showMain();
+            }, 3000);
+        }
+
+        function showLoginMessage(message) {
+            loginMessageElement.textContent = message;
+            loginMessageElement.style.color = '#ff5c5c';
+        }
+
+        function validateKey(key, deviceId, callback) {
+            database.ref(KEYS_DB_PATH + '/' + key).once('value').then((snapshot) => {
+                const keyData = snapshot.val();
+                if (!keyData || keyData.active === false) {
+                    callback(false, 'Invalid key');
+                    return;
+                }
+                const now = Date.now();
+                if (keyData.expireAt < now) {
+                    callback(false, 'Key expired');
+                    return;
+                }
+                const devices = keyData.devices || {};
+                const deviceCount = Object.keys(devices).length;
+
+                if (devices[deviceId]) {
+                    callback(true, keyData);
+                    return;
+                }
+
+                if (deviceCount >= keyData.deviceLimit) {
+                    callback(false, 'Device limit reached');
+                    return;
+                }
+                callback(true, keyData);
+            }).catch((error) => {
+                console.error('Error validating key:', error);
+                callback(false, 'Error validating key');
+            });
+        }
+
+        function addDeviceToKey(key, deviceId) {
+            const timestamp = new Date().toISOString();
+            database.ref(KEYS_DB_PATH + '/' + key + '/devices').update({ [deviceId]: true });
+            database.ref(KEYS_DB_PATH + '/' + key + '/loginHistory').push({ timestamp: timestamp, deviceId: deviceId });
+        }
+
+        document.querySelector('.login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const loginKey = document.getElementById('loginKey').value.trim();
+            const deviceId = getDeviceId();
+            loginMessageElement.textContent = '';
+
+            database.ref(SERVER_STATUS_PATH).once('value').then((snap) => {
+                if (snap.exists() && snap.val() === 'off') {
+                    showLoginMessage('Server is OFF. Please try again later.');
+                    return;
+                }
+                validateKey(loginKey, deviceId, (valid, message) => {
+                    if (!valid) {
+                        showLoginMessage(message);
+                        return;
+                    }
+                    if (!message.devices || !message.devices[deviceId]) {
+                        addDeviceToKey(loginKey, deviceId);
+                    }
+                    localStorage.setItem('loginKey', loginKey);
+                    const expiryTimeout = message.expireAt - Date.now();
+                    setTimeout(showLogin, expiryTimeout);
+                    showLoading();
+                });
+            });
+        });
+
+        window.addEventListener('load', () => {
+            const savedKey = localStorage.getItem('loginKey');
+            const deviceId = getDeviceId();
+            if (savedKey) {
+                database.ref(SERVER_STATUS_PATH).once('value').then((snap) => {
+                    if (snap.exists() && snap.val() === 'off') {
+                        showLogin();
+                        return;
+                    }
+                    validateKey(savedKey, deviceId, (valid, message) => {
+                        if (valid) {
+                            const expiryTimeout = message.expireAt - Date.now();
+                            setTimeout(showLogin, expiryTimeout);
+                            showLoading();
+                        } else {
+                            showLogin();
+                        }
+                    });
+                });
+            } else {
+                showLogin();
+            }
+        });
+
+        const periodNumberElement = document.getElementById('periodNumber');
+        const timerElement = document.getElementById('timer');
+        const currentPredictionElement = document.getElementById('currentPrediction');
+        const historyBody = document.getElementById('historyBody');
+        const homePage = document.getElementById('home');
+        const historyPage = document.getElementById('history');
+
+        let lastPeriodNumber = null;
+        let history = [];
+        let pendingResult = null;
+        let lastTimerUpdate = 0;
+        let totalWins = 0;
+        let totalLosses = 0;
+        let totalNumbersWin = 0;
+        let totalWinStreak = 0;
+        let totalLossStreak = 0;
+        let lastResults = { bigsmall: [], numbers: [], colors: [] };
+        const selectedServer = 'vip';
+
+        const numberColors = {
+            0: ['red', 'violet'],
+            1: ['green'],
+            2: ['red'],
+            3: ['green'],
+            4: ['red'],
+            5: ['green', 'violet'],
+            6: ['red'],
+            7: ['green'],
+            8: ['red'],
+            9: ['green']
+        };
+        const greenNumbers = [1, 3, 5, 7, 9];
+        const redNumbers = [0, 2, 4, 6, 8];
+        const bigNumbers = [5, 6, 7, 8, 9];
+        const smallNumbers = [0, 1, 2, 3, 4];
+        const smallRedNumbers = [0, 2, 4];
+        const smallGreenNumbers = [1, 3];
+        const bigGreenNumbers = [5, 7, 9];
+        const bigRedNumbers = [6, 8];
+
+        function showPage(id) {
+            const pages = document.querySelectorAll('.page-section');
+            const navButtons = document.querySelectorAll('.nav-buttons button');
+
+            pages.forEach(p => p.classList.remove('active'));
+            navButtons.forEach(btn => btn.classList.remove('active'));
+
+            if (id === 'home') {
+                homePage.style.transform = 'translateX(0)';
+                historyPage.style.transform = 'translateX(100%)';
+            } else {
+                homePage.style.transform = 'translateX(-100%)';
+                historyPage.style.transform = 'translateX(0)';
+            }
+
+            document.getElementById(id).classList.add('active');
+            document.getElementById(id + '-btn').classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('home-btn').classList.add('active');
+            showPage('home');
+        });
+
+        async function updatePeriodAndTimer() {
+            const now = new Date();
+            const currentTime = now.getTime();
+
+            if (currentTime - lastTimerUpdate < 1000) return;
+            lastTimerUpdate = currentTime;
+
+            const year = now.getUTCFullYear();
+            const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(now.getUTCDate()).padStart(2, '0');
+            const totalMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+
+            const periodNumber = `${year}${month}${day}1000${10001 + totalMinutes}`;
+            const remainingSeconds = 60 - now.getUTCSeconds();
+
+            if (lastPeriodNumber !== periodNumber) {
+                if (pendingResult && lastPeriodNumber) {
+                    try {
+                        await checkPendingResult(lastPeriodNumber);
+                    } catch (err) {
+                        console.error('Error checking pending result:', err);
+                    }
+                }
+                lastPeriodNumber = periodNumber;
+                periodNumberElement.textContent = periodNumber || 'N/A';
+                try {
+                    await prefillLastResultsFromAPI();
+                    console.log('Last results after prefill:', lastResults);
+                    await generatePrediction(periodNumber);
+                } catch (err) {
+                    console.error('Error in period update:', err);
+                    currentPredictionElement.textContent = 'Error fetching data. Retrying...';
+                }
+            }
+
+            timerElement.textContent = `00:${String(remainingSeconds).padStart(2, '0')}`;
+            updateRealTimeStats();
+        }
+        setInterval(updatePeriodAndTimer, 1000);
+
+        async function fetchLastResultsFromAPI() {
+            try {
+                const response = await fetch('https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('API response:', data);
+                const results = data?.data?.list?.slice(0, 50) || [];
+                if (!results.length) {
+                    console.warn('No results returned from API');
+                }
+                return results;
+            } catch (e) {
+                console.error('API fetch error:', e);
+                return [];
+            }
+        }
+
+        async function prefillLastResultsFromAPI() {
+            const recent = await fetchLastResultsFromAPI();
+            console.log('Fetched recent results:', recent);
+            if (!recent.length) {
+                console.warn('No data to prefill lastResults');
+                // Fallback to generate some dummy data
+                lastResults.bigsmall = Array(ADVANCED_CONFIG.TREND_WINDOW).fill('BIG');
+                lastResults.numbers = Array(ADVANCED_CONFIG.TREND_WINDOW).fill(5);
+                lastResults.colors = Array(ADVANCED_CONFIG.TREND_WINDOW).fill('green');
+                historicalData.bigsmall = [...lastResults.bigsmall];
+                historicalData.numbers = [...lastResults.numbers];
+                historicalData.colors = [...lastResults.colors];
+                return;
+            }
+
+            lastResults.bigsmall = [];
+            lastResults.numbers = [];
+            lastResults.colors = [];
+            historicalData.bigsmall = [];
+            historicalData.numbers = [];
+            historicalData.colors = [];
+
+            for (let i = recent.length - 1; i >= 0; i--) {
+                const item = recent[i];
+                const num = parseInt(item.number, 10) % 10;
+                const category = num >= 5 ? 'BIG' : 'SMALL';
+                const color = numberColors[num][0]; // Use primary color (red or green)
+
+                lastResults.bigsmall.push(category);
+                lastResults.numbers.push(num);
+                lastResults.colors.push(color);
+
+                historicalData.bigsmall.push(category);
+                historicalData.numbers.push(num);
+                historicalData.colors.push(color);
+            }
+
+            console.log('Prefilled lastResults:', lastResults);
+        }
+
+        function analyzeTrends(results) {
+            if (results.length < 10) {
+                console.log('Insufficient data for trend analysis:', results.length);
+                return { trend: 'neutral', confidence: ADVANCED_CONFIG.MIN_CONFIDENCE, volatility: 0, strength: 'Good' };
+            }
+
+            const recentResults = results.slice(0, ADVANCED_CONFIG.TREND_WINDOW);
+            const bigCount = recentResults.filter(r => r === 'BIG').length;
+            const smallCount = recentResults.length - bigCount;
+            const bigRatio = bigCount / recentResults.length;
+
+            const weights = Array.from({ length: recentResults.length }, (_, i) => Math.exp(-i * 0.05));
+            const weightedBig = recentResults.reduce((sum, r, i) => sum + (r === 'BIG' ? weights[i] : 0), 0);
+            const weightedSmall = recentResults.reduce((sum, r, i) => sum + (r === 'SMALL' ? weights[i] : 0), 0);
+            const trendScore = weightedBig / (weightedBig + weightedSmall || 1);
+
+            const transitions = recentResults.slice(1).reduce((count, r, i) => 
+                r !== recentResults[i] ? count + 1 : count, 0);
+            const volatility = transitions / (recentResults.length - 1);
+
+            let trend = 'neutral';
+            let strength = 'Good';
+            if (trendScore > 0.6 && volatility < ADVANCED_CONFIG.VOLATILITY_THRESHOLD) {
+                trend = 'BIG';
+                strength = trendScore > 0.75 ? 'Sure Shot' : 'Good';
+            } else if (trendScore < 0.4 && volatility < ADVANCED_CONFIG.VOLATILITY_THRESHOLD) {
+                trend = 'SMALL';
+                strength = trendScore < 0.25 ? 'Sure Shot' : 'Good';
+            } else if (volatility > ADVANCED_CONFIG.VOLATILITY_THRESHOLD) {
+                strength = 'Worst';
+            }
+
+            console.log('Trend analysis:', { trend, confidence: Math.min(0.95, Math.abs(trendScore - 0.5) * 2 + 0.5), volatility, bigRatio, strength });
+
+            return {
+                trend,
+                confidence: Math.min(0.95, Math.abs(trendScore - 0.5) * 2 + 0.5),
+                volatility,
+                bigRatio,
+                strength
+            };
+        }
+
+        function analyzeColorTrends(colors) {
+            if (colors.length < 10) {
+                console.log('Insufficient data for color trend analysis:', colors.length);
+                return { color: 'neutral', confidence: ADVANCED_CONFIG.MIN_CONFIDENCE };
+            }
+
+            const recentColors = colors.slice(0, ADVANCED_CONFIG.TREND_WINDOW);
+            const colorCounts = { green: 0, red: 0 };
+            recentColors.forEach(c => colorCounts[c]++);
+
+            const weights = Array.from({ length: recentColors.length }, (_, i) => Math.exp(-i * 0.05));
+            const weightedCounts = { green: 0, red: 0 };
+            recentColors.forEach((c, i) => weightedCounts[c] += weights[i]);
+
+            const maxWeighted = Math.max(...Object.values(weightedCounts));
+            const dominantColor = Object.keys(weightedCounts).find(k => weightedCounts[k] === maxWeighted);
+            const colorConfidence = maxWeighted / weights.reduce((a, b) => a + b, 0);
+
+            console.log('Color trend analysis:', { color: dominantColor, confidence: colorConfidence });
+
+            return {
+                color: dominantColor,
+                confidence: Math.min(0.95, colorConfidence),
+            };
+        }
+
+        function detectPatterns(results, numbers, colors) {
+            if (results.length < ADVANCED_CONFIG.PATTERN_WINDOW) {
+                console.log('Insufficient data for pattern detection:', results.length);
+                return [{ pattern: 'none', confidence: 0 }];
+            }
+
+            const recentResults = results.slice(0, ADVANCED_CONFIG.PATTERN_WINDOW);
+            const recentNumbers = numbers.slice(0, ADVANCED_CONFIG.PATTERN_WINDOW);
+            const recentColors = colors.slice(0, ADVANCED_CONFIG.PATTERN_WINDOW);
+            let patterns = [];
+
+            for (const category of Object.keys(patternDatabase)) {
+                for (const p of patternDatabase[category]) {
+                    const matchScore = evaluatePatternMatch(p.pattern, recentResults, recentNumbers, recentColors);
+                    if (matchScore > 0.5) {
+                        patterns.push({ pattern: p.id, confidence: matchScore * p.confidence });
+                    }
+                }
+            }
+
+            patterns.sort((a, b) => b.confidence - a.confidence);
+            patterns = patterns.slice(0, 3);
+            console.log('Detected patterns:', patterns);
+            return patterns.length ? patterns : [{ pattern: 'none', confidence: 0 }];
+        }
+
+        function evaluatePatternMatch(pattern, results, numbers, colors) {
+            let score = 0;
+            if (pattern.includes('BIG') || pattern.includes('SMALL')) {
+                const patternParts = pattern.split('-');
+                const recentSequence = results.join('-');
+                score += recentSequence.includes(pattern) ? 0.9 : 0;
+            }
+            if (pattern.includes('consecutive')) {
+                const [start, end] = pattern.match(/\d+/g)?.map(Number) || [];
+                score += numbers.includes(start) && numbers.includes(end) ? 0.85 : 0;
+            }
+            if (pattern.includes('volatility')) {
+                const volatility = calculateVolatility(numbers);
+                score += (pattern.includes('high') && volatility > 0.5) || (pattern.includes('low') && volatility <= 0.5) ? 0.8 : 0;
+            }
+            if (pattern.includes('minute') || pattern.includes('hour')) {
+                const minute = new Date().getUTCMinutes();
+                const hour = new Date().getUTCHours();
+                score += (pattern.includes(`minute_${Math.floor(minute / 15)}`) || pattern.includes(`hour_${Math.floor(hour / 6)}`)) ? 0.75 : 0;
+            }
+            if (pattern.includes('same_color')) {
+                const color = pattern.includes('green') ? 'green' : 'red';
+                score += colors.slice(0, 3).every(c => c === color) ? 0.9 : 0;
+            }
+            return score;
+        }
+
+        function calculateVolatility(numbers) {
+            if (numbers.length < 2) return 0;
+            const mean = numbers.reduce((sum, n) => sum + n, 0) / numbers.length;
+            const variance = numbers.reduce((sum, n) => sum + Math.pow(n - mean, 2), 0) / numbers.length;
+            return Math.sqrt(variance) / 10;
+        }
+
+        function selectTwoSameColorNumbers(category, colorTrend) {
+            let availableNumbers;
+            if (category === 'BIG') {
+                availableNumbers = colorTrend.color === 'green' ? bigGreenNumbers : bigRedNumbers;
+            } else {
+                availableNumbers = colorTrend.color === 'green' ? smallGreenNumbers : smallRedNumbers;
+            }
+            // Randomly select two numbers
+            const shuffled = availableNumbers.sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, 2);
+        }
+
+        async function advancedPredict(resultType) {
+            // Fallback prediction if insufficient data
+            if (lastResults[resultType].length < 10) {
+                console.warn('Insufficient data for prediction, using fallback');
+                const fallbackCategory = Math.random() > 0.5 ? 'BIG' : 'SMALL';
+                const colorTrend = { color: Math.random() > 0.5 ? 'green' : 'red', confidence: ADVANCED_CONFIG.MIN_CONFIDENCE };
+                const numbers = selectTwoSameColorNumbers(fallbackCategory, colorTrend);
+                return {
+                    category: fallbackCategory,
+                    numbers,
+                    probability: (ADVANCED_CONFIG.MIN_CONFIDENCE * 100).toFixed(1),
+                    trendData: { trend: 'neutral', confidence: ADVANCED_CONFIG.MIN_CONFIDENCE, volatility: 0, strength: 'Good' },
+                    patterns: [{ pattern: 'none', confidence: 0 }],
+                };
+            }
+
+            const trendData = analyzeTrends(lastResults.bigsmall);
+            const colorData = analyzeColorTrends(lastResults.colors);
+            const patterns = detectPatterns(lastResults.bigsmall, lastResults.numbers, lastResults.colors);
+
+            // Weighted prediction
+            let bigScore = ADVANCED_CONFIG.WEIGHT_RECENT * trendData.bigRatio +
+                           ADVANCED_CONFIG.WEIGHT_HISTORICAL * (historicalData.bigsmall.filter(x => x === 'BIG').length / (historicalData.bigsmall.length || 1)) +
+                           ADVANCED_CONFIG.WEIGHT_LOGISTIC * Math.random() +
+                           ADVANCED_CONFIG.WEIGHT_RANDOM_FOREST * Math.random() +
+                           ADVANCED_CONFIG.WEIGHT_LSTM * Math.random() +
+                           ADVANCED_CONFIG.WEIGHT_BAYESIAN * Math.random() +
+                           ADVANCED_CONFIG.WEIGHT_PATTERN * patterns.reduce((sum, p) => sum + (p.pattern.includes('BIG') ? p.confidence : 0), 0);
+
+            const category = bigScore > 0.5 ? 'BIG' : 'SMALL';
+            const numbers = selectTwoSameColorNumbers(category, colorData);
+            const probability = Math.min(95, Math.max(ADVANCED_CONFIG.MIN_CONFIDENCE * 100, Math.abs(bigScore - 0.5) * 200));
+
+            // Update Q-table
+            const state = lastResults.bigsmall.slice(0, ADVANCED_CONFIG.MARKOV_ORDER).join('-');
+            if (!qTable[state]) qTable[state] = { BIG: 0, SMALL: 0 };
+            qTable[state][category] += ADVANCED_CONFIG.Q_LEARNING_RATE * (1 - qTable[state][category]);
+
+            return {
+                category,
+                numbers,
+                probability: probability.toFixed(1),
+                trendData,
+                patterns,
+            };
+        }
+
+        async function generatePrediction(period) {
+            currentPredictionElement.textContent = 'Processing...';
+
+            const resultType = 'bigsmall';
+            let prediction;
+
+            try {
+                const existingPrediction = history.find(h => h.period === period);
+                if (existingPrediction) {
+                    console.log('Prediction already exists for period:', period);
+                    return;
+                }
+
+                prediction = await advancedPredict(resultType);
+                console.log('Generated prediction:', prediction);
+
+                currentPredictionElement.innerHTML = `${prediction.category} | Numbers: ${prediction.numbers.join(', ')} (${prediction.probability}%)`;
+                
+                const trendStrength = prediction.trendData.strength;
+                let trendIndicator = '';
+                if (trendStrength === 'Good') {
+                    trendIndicator = '<span class="trend-indicator trend-good"></span>';
+                } else if (trendStrength === 'Sure Shot') {
+                    trendIndicator = '<span class="trend-indicator trend-sure-shot"></span><span class="trend-indicator trend-sure-shot"></span>';
+                } else if (trendStrength === 'Worst') {
+                    trendIndicator = '<span class="trend-indicator trend-worst"></span>';
+                }
+
+                document.getElementById('currentTrend').innerHTML = `${prediction.trendData.trend} (${(prediction.trendData.confidence * 100).toFixed(1)}%) ${trendIndicator}`;
+                document.getElementById('volatility').textContent = `${(prediction.trendData.volatility * 100).toFixed(1)}%`;
+                document.getElementById('detectedPatterns').textContent = prediction.patterns.map(p => `${p.pattern} (${(p.confidence * 100).toFixed(1)}%)`).join(', ') || 'None';
+                document.getElementById('trendStrength').textContent = trendStrength;
+
+                history.unshift({
+                    period,
+                    category: prediction.category,
+                    numbers: prediction.numbers,
+                    status: "Pending",
+                    server: selectedServer,
+                    probability: prediction.probability,
+                    trendData: prediction.trendData,
+                    patterns: prediction.patterns,
+                });
+                pendingResult = history[0];
+                lastResults[resultType].unshift(prediction.category);
+                lastResults.numbers.unshift(prediction.numbers[0]);
+                lastResults.colors.unshift(numberColors[prediction.numbers[0]][0]);
+                if (lastResults[resultType].length > ADVANCED_CONFIG.TREND_WINDOW) {
+                    lastResults[resultType].pop();
+                    lastResults.numbers.pop();
+                    lastResults.colors.pop();
+                }
+                historicalData.bigsmall.unshift(prediction.category);
+                historicalData.numbers.unshift(prediction.numbers[0]);
+                historicalData.colors.unshift(numberColors[prediction.numbers[0]][0]);
+                historicalData.patterns.unshift(prediction.patterns[0].pattern);
+                if (historicalData.bigsmall.length > ADVANCED_CONFIG.TREND_WINDOW) {
+                    historicalData.bigsmall.shift();
+                    historicalData.numbers.shift();
+                    historicalData.colors.shift();
+                    historicalData.patterns.shift();
+                }
+                renderHistory();
+            } catch (error) {
+                console.error("Error in generatePrediction:", error);
+                currentPredictionElement.textContent = 'Error fetching data. Retrying...';
+            }
+        }
+
+        async function checkPendingResult(period) {
+            if (!pendingResult || pendingResult.period !== period) return;
+
+            const apiResultData = await fetchLastResultsFromAPI();
+            console.log('Checking pending result for period:', period, 'API data:', apiResultData);
+            if (!apiResultData.length) {
+                console.warn('No API data for checking pending result');
+                return;
+            }
+            const latest = apiResultData[0];
+
+            if (latest && latest.issueNumber === period) {
+                const actualNumber = parseInt(latest.number, 10) % 10;
+                const actualCategory = actualNumber >= 5 ? 'BIG' : 'SMALL';
+                const actualColor = numberColors[actualNumber][0];
+
+                let isCategoryWin = pendingResult.category === actualCategory;
+                let isNumberWin = pendingResult.numbers.includes(actualNumber);
+
+                let isWin = isCategoryWin || isNumberWin;
+
+                pendingResult.status = isWin ? 'WIN' : 'LOSS';
+                pendingResult.apiCategory = actualCategory;
+                pendingResult.apiNumber = actualNumber;
+
+                historicalData.streaks = {
+                    win: isWin ? historicalData.streaks.win + 1 : 0,
+                    loss: isWin ? 0 : historicalData.streaks.loss + 1,
+                };
+                totalWinStreak = Math.max(totalWinStreak, historicalData.streaks.win);
+                totalLossStreak = Math.max(totalLossStreak, historicalData.streaks.loss);
+
+                if (isWin) {
+                    totalWins++;
+                    if (isNumberWin) totalNumbersWin++;
+                    showWinAnimation();
+                    showNotification('win', `WIN! Win Streak: ${historicalData.streaks.win}`);
+                } else {
+                    totalLosses++;
+                    showLossAnimation();
+                    showNotification('loss', `LOSS! Loss Streak: ${historicalData.streaks.loss}`);
+                }
+
+                historicalData.numbers.unshift(actualNumber);
+                historicalData.colors.unshift(actualColor);
+                if (historicalData.numbers.length > ADVANCED_CONFIG.TREND_WINDOW) {
+                    historicalData.numbers.shift();
+                    historicalData.colors.shift();
+                }
+
+                console.log('Pending result checked:', pendingResult);
+                renderHistory();
+                pendingResult = null;
+            }
+        }
+
+        function renderHistory() {
+            if (!historyBody) {
+                console.error('historyBody element not found');
+                return;
+            }
+
+            const uniqueHistory = [];
+            const seenPeriods = new Set();
+
+            for (const entry of history) {
+                if (!seenPeriods.has(entry.period)) {
+                    seenPeriods.add(entry.period);
+                    uniqueHistory.push(entry);
+                }
+            }
+
+            history = uniqueHistory;
+
+            const renderedHistory = history.map(h => {
+                const statusClass = h.status === 'Pending' ? 'pending' : (h.status === 'WIN' ? 'win' : 'loss');
+                const statusIcon = h.status === 'Pending' ? `<span class="pending-spinner"></span>` :
+                    h.status === 'WIN' ? `<span class="win-trophy"></span>` :
+                        `<span class="loss-signal"></span>`;
+                const trendInfo = h.trendData ? `Trend: ${h.trendData.trend}, Confidence: ${(h.trendData.confidence * 100).toFixed(1)}%, Volatility: ${(h.trendData.volatility * 100).toFixed(1)}%` : 'N/A';
+                const patternInfo = h.patterns ? h.patterns.map(p => `${p.pattern} (${(p.confidence * 100).toFixed(1)}%)`).join(', ') : 'None';
+
+                let trendStrengthIndicator = '';
+                if (h.trendData) {
+                    const strength = h.trendData.strength;
+                    if (strength === 'Good') {
+                        trendStrengthIndicator = '<span class="trend-indicator trend-good"></span>';
+                    } else if (strength === 'Sure Shot') {
+                        trendStrengthIndicator = '<span class="trend-indicator trend-sure-shot"></span><span class="trend-indicator trend-sure-shot"></span>';
+                    } else if (strength === 'Worst') {
+                        trendStrengthIndicator = '<span class="trend-indicator trend-worst"></span>';
+                    }
+                }
+
+                return `
+                    <div class="history-card ${statusClass}">
+                        <div class="history-content">
+                            <span><i class="fas fa-calendar"></i> PERIOD - <span class="value">${h.period || 'N/A'}</span></span>
+                            <span><i class="fas fa-server"></i> ENGINE - <span class="value">${h.server || 'Unknown'}</span></span>
+                            <span><i class="fas fa-chart-line"></i> PREDICTION - <span class="value">${h.category} | Numbers: ${h.numbers.join(', ')} (${h.probability}%)</span></span>
+                            <span><i class="fas fa-check-circle"></i> RESULT - <span class="value">${h.status === 'Pending' ? 'Pending' : `${h.apiCategory} | Number: ${h.apiNumber}`}</span> ${statusIcon}</span>
+                            <span><i class="fas fa-chart-bar"></i> TREND - <span class="value">${trendInfo} ${trendStrengthIndicator}</span></span>
+                            <span><i class="fas fa-sync"></i> PATTERNS - <span class="value">${patternInfo}</span></span>
+                        </div>
+                    </div>`;
+            }).join("");
+            historyBody.innerHTML = renderedHistory || '<div>No history available</div>';
+            historyBody.scrollTop = historyBody.scrollHeight;
+        }
+
+        function updateRealTimeStats() {
+            let totalBets = totalWins + totalLosses;
+            let currentWinRate = totalBets > 0 ? ((totalWins / totalBets) * 100).toFixed(2) : 0;
+
+            document.getElementById('totalPredictions').textContent = totalBets;
+            document.getElementById('totalWins').textContent = totalWins;
+            document.getElementById('totalLosses').textContent = totalLosses;
+            document.getElementById('winRate').textContent = `${currentWinRate}%`;
+            document.getElementById('totalNumbersWin').textContent = totalNumbersWin;
+            document.getElementById('totalWinStreak').textContent = totalWinStreak;
+            document.getElementById('totalLossStreak').textContent = totalLossStreak;
+
+            const latestPrediction = history[0];
+            if (latestPrediction?.trendData) {
+                const trendData = latestPrediction.trendData;
+                let trendIndicator = '';
+                if (trendData.strength === 'Good') {
+                    trendIndicator = '<span class="trend-indicator trend-good"></span>';
+                } else if (trendData.strength === 'Sure Shot') {
+                    trendIndicator = '<span class="trend-indicator trend-sure-shot"></span><span class="trend-indicator trend-sure-shot"></span>';
+                } else if (trendData.strength === 'Worst') {
+                    trendIndicator = '<span class="trend-indicator trend-worst"></span>';
+                }
+
+                document.getElementById('currentTrend').innerHTML = `${trendData.trend} (${(trendData.confidence * 100).toFixed(1)}%) ${trendIndicator}`;
+                document.getElementById('volatility').textContent = `${(trendData.volatility * 100).toFixed(1)}%`;
+                document.getElementById('trendStrength').textContent = trendData.strength;
+            } else {
+                document.getElementById('currentTrend').innerHTML = 'Neutral (85%) <span class="trend-indicator trend-good"></span>';
+                document.getElementById('volatility').textContent = '0%';
+                document.getElementById('trendStrength').textContent = 'Good';
+            }
+
+            document.getElementById('detectedPatterns').textContent = latestPrediction?.patterns?.map(p => `${p.pattern} (${(p.confidence * 100).toFixed(1)}%)`).join(', ') || 'None';
+
+            const winStreakBadge = document.getElementById('win-streak-badge');
+            if (historicalData.streaks.win > 0) {
+                winStreakBadge.textContent = `Win Streak: ${historicalData.streaks.win}`;
+                winStreakBadge.classList.remove('hidden');
+            } else {
+                winStreakBadge.classList.add('hidden');
+            }
+        }
+
+        function clearHistory() {
+            history = [];
+            historicalData.streaks = { win: 0, loss: 0 };
+            totalWins = 0;
+            totalLosses = 0;
+            totalNumbersWin = 0;
+            totalWinStreak = 0;
+            totalLossStreak = 0;
+            lastResults = { bigsmall: [], numbers: [], colors: [] };
+            historicalData = {
+                bigsmall: [],
+                numbers: [],
+                colors: [],
+                volatility: [],
+                streaks: { win: 0, loss: 0 },
+                patterns: [],
+                totalNumbersWin: 0,
+                totalWinStreak: 0,
+                totalLossStreak: 0,
+            };
+            qTable = {};
+            renderHistory();
+            updateRealTimeStats();
+            currentPredictionElement.textContent = 'Waiting for data...';
+        }
+
+        function showNotification(type, message) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function showWinAnimation() {
+            const jsConfetti = new JSConfetti();
+            jsConfetti.addConfetti();
+        }
+
+        function showLossAnimation() {
+            const blastOverlay = document.getElementById('blast-overlay');
+            blastOverlay.classList.add('active');
+            setTimeout(() => {
+                blastOverlay.classList.remove('active');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
