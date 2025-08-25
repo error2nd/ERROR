@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>CVF AURA+++</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" />
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <style>
+        /* Premium Dark Theme Variables */
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1E1E1E;
+            --bg-tertiary: #2C2C2C;
+            --text-primary: #F0F0F0;
+            --text-secondary: #A0A0A0;
+            --accent-gold: #FFD700;
+            --accent-blue: #00BFFF;
+            --accent-purple: #8A2BE2;
+            --accent-green: #32CD32;
+            --accent-red: #FF4500;
+            --border-color: #383838;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --glow-gold: 0 0 15px rgba(255, 215, 0, 0.6);
+            --glow-blue: 0 0 15px rgba(0, 191, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        .login-container, .main-container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-secondary);
+            box-shadow: var(--shadow);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .app-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .app-subtitle {
+            font-size: 1em;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 1.1em;
+            transition: all 0.4s ease;
+        }
+
+        input[type="password"]:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px rgba(0, 191, 255, 0.3);
+            background: var(--bg-secondary);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-telegram {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--accent-purple);
+            color: #FFFFFF;
+            padding: 12px 24px;
+            font-size: 1em;
+            border-radius: 10px;
+            margin: 24px auto 0;
+            transition: all 0.4s ease;
+            text-decoration: none;
+        }
+
+        .btn-telegram:hover {
+            background: #6A1AAB;
+            transform: scale(1.03);
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn-telegram i {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .login-message {
+            margin-top: 16px;
+            font-size: 0.9em;
+            color: var(--accent-red);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .hidden { display: none !important; }
+
+        .header {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-around;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-buttons button {
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            margin: 0 6px;
+        }
+
+        .nav-buttons button.active {
+            color: var(--accent-gold);
+            background: var(--bg-tertiary);
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        .nav-buttons button:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-buttons button i {
+            margin-right: 8px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        .nav-buttons button.active i {
+            color: var(--accent-gold);
+        }
+
+        .app-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: var(--bg-primary);
+        }
+
+        .page-section {
+            display: none;
+            flex-direction: column;
+        }
+
+        .page-section.active {
+            display: flex;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dashboard-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .icon-gold { color: var(--accent-gold); }
+        .icon-blue { color: var(--accent-blue); }
+        .icon-green { color: var(--accent-green); }
+        .icon-red { color: var(--accent-red); }
+
+        .prediction-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .prediction-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .prediction-value.red { color: var(--accent-red); }
+        .prediction-value.green { color: var(--accent-green); }
+        .prediction-value.pink { color: var(--accent-purple); }
+        .prediction-value.orange { color: #FF8C00; }
+
+        .confidence-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 16px;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-gold) 100%);
+            box-shadow: 0 0 8px rgba(0, 191, 255, 0.4);
+            transition: width 0.6s ease-in-out;
+        }
+
+        .confidence-label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .stats-item {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stats-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .stats-item .value {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+        }
+
+        .stats-item .label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+        
+        .history-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        .history-card.win {
+            border: 2px solid var(--accent-green);
+        }
+
+        .history-card.loss {
+            border: 2px solid var(--accent-red);
+        }
+
+        .history-card.pending {
+            border: 2px solid var(--accent-blue);
+        }
+        
+        .history-card:hover {
+            transform: translateX(6px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+        }
+
+        .history-content span {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .history-content .value {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .history-content .numbers-display.red { color: var(--accent-red); }
+        .history-content .numbers-display.green { color: var(--accent-green); }
+
+        .win-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--accent-green);
+            color: #FFFFFF;
+            font-size: 0.85em;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .btn-clear-history {
+            background: var(--accent-red);
+            color: #FFFFFF;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-clear-history:hover {
+            background: #b03a00;
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(255, 69, 0, 0.4);
+        }
+
+        .scroll-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 8px;
+            max-height: calc(100vh - 280px);
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-blue) var(--bg-tertiary);
+        }
+        
+        .scroll-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scroll-container::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background-color: var(--accent-blue);
+            border-radius: 4px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            color: #FFFFFF;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            animation: fadeInOut 3s ease-in-out forwards;
+        }
+
+        .notification.win { background: var(--accent-green); }
+        .notification.loss { background: var(--accent-red); }
+        .notification.mode-activate { background: var(--accent-purple); }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -20px); }
+            10% { opacity: 1; transform: translate(-50%, 0); }
+            90% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, -20px); }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .loading-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .progress-bar {
+            width: 250px;
+            height: 10px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-gold));
+            width: 0;
+            transition: width 3s linear;
+        }
+        
+        .trends-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .trends-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .trends-card .value {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-top: 8px;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .winning-number {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-right: 8px;
+            background: var(--bg-tertiary);
+        }
+
+        .winning-number.red { background: var(--accent-red); color: white; }
+        .winning-number.green { background: var(--accent-green); color: white; }
+        .winning-number.purple { background: var(--accent-purple); color: white; }
+        .winning-number.orange { background: #FF8C00; color: white; }
+        .winning-number.mixed {
+            background: linear-gradient(to right, var(--accent-green), var(--accent-red));
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .insight-item {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .insight-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .insight-item .title {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .insight-item .value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .mode-selector {
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .mode-selector select {
+            padding: 10px;
+            font-size: 1em;
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mode-selector select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px rgba(0, 191, 255, 0.3);
+        }
+
+        @media (max-width: 450px) {
+            .main-container {
+                width: 100%;
+                padding: 0;
+                border-radius: 0;
+            }
+            .card {
+                padding: 24px;
+            }
+            .app-title, .header-text {
+                font-size: 2em;
+            }
+            .nav-buttons button {
+                font-size: 0.8em;
+                padding: 8px;
+            }
+        }
+
+        /* --- New Modal Styles --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transform: translateY(-20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+        }
+
+        .modal-text {
+            font-size: 1.1em;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+        }
+        
+        .modal-text span {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .modal-close-btn {
+            background: var(--accent-blue);
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close-btn:hover {
+            background: #008CBA;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <div id="login-page" class="login-container">
+        <div class="card">
+            <h1 class="app-title">CVF AURA+++</h1>
+            <p class="app-subtitle">Quantum Prediction Engine</p>
+            <form class="login-form">
+                <div class="input-group">
+                    <input type="password" id="loginKey" placeholder="Enter your premium access key" required>
+                </div>
+                <button type="submit" class="btn btn-primary">ACTIVATE ENGINE</button>
+                <div id="login-message" class="login-message"></div>
+            </form>
+            <p style="margin-top:20px; color:var(--text-secondary); font-size:0.9em;">No key? Get one from our channel.</p>
+            <a href="https://t.me/cvf_kutti" class="btn btn-telegram" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-telegram-plane"></i> Get Premium Key
+            </a>
+        </div>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="card">
+            <div class="loading-text">Initializing Quantum Core...</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-page" class="main-container hidden">
+        <div class="header">
+            <div class="header-text">CVF AURA+++</div>
+        </div>
+        <div class="nav-buttons">
+            <button id="dashboard-btn" class="active">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </button>
+            <button id="history-btn">
+                <i class="fas fa-history"></i> History
+            </button>
+            <button id="trends-btn">
+                <i class="fas fa-chart-bar"></i> Insights
+            </button>
+        </div>
+        <div class="app-content">
+            <div id="dashboard" class="page-section active">
+                <div class="mode-selector">
+                    <select id="modeSelect">
+                        <option value="jack">JACK</option>
+                        <option value="2-rose">2-ROSE</option>
+                    </select>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <i class="fas fa-microchip icon-gold"></i>
+                        <span class="card-title">Live Prediction</span>
+                    </div>
+                    <div class="prediction-info">
+                        <span id="periodNumber">Loading...</span>
+                        <span id="timer">00:00</span>
+                    </div>
+                    <div id="currentPrediction" class="prediction-value">Waiting for Quantum Signal...</div>
+                    <div class="confidence-bar">
+                        <div id="confidence-fill" class="confidence-fill"></div>
+                    </div>
+                    <div class="confidence-label">Confidence: <span id="confidence-percentage">0%</span></div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-pie icon-gold"></i>
+                        <span class="card-title">Performance Metrics</span>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stats-item">
+                            <i class="fas fa-trophy icon-green"></i>
+                            <span class="value" id="totalWins">0</span>
+                            <span class="label">Total Wins</span>
+                        </div>
+                        <div class="stats-item">
+                            <i class="fas fa-percentage icon-blue"></i>
+                            <span class="value" id="winRate">0%</span>
+                            <span class="label">Win Rate</span>
+                        </div>
+                        <div class="stats-item">
+                            <i class="fas fa-fire-alt icon-gold"></i>
+                            <span class="value" id="winStreak">0</span>
+                            <span class="label">Win Streak</span>
+                        </div>
+                        <div class="stats-item">
+                            <i class="fas fa-exclamation-triangle icon-red"></i>
+                            <span class="value" id="lossStreak">0</span>
+                            <span class="label">Loss Streak</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="history" class="page-section hidden">
+                <div class="section-header">
+                    <h2 class="section-title">Prediction Log</h2>
+                    <button class="btn btn-clear-history" id="clear-history-btn">
+                        <i class="fas fa-trash-alt"></i> Clear Log
+                    </button>
+                </div>
+                <div id="historyBody" class="scroll-container">
+                </div>
+            </div>
+            
+            <div id="trends" class="page-section hidden">
+                <div class="section-header">
+                    <h2 class="section-title">Quantum Insights</h2>
+                </div>
+                <div id="trendsBody" class="scroll-container">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification-area"></div>
+
+    <div id="time-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Engine Locked</h2>
+            <p class="modal-text">
+                The prediction engine is currently inactive. It is available from <span id="next-active-time"></span>.
+            </p>
+            <button class="modal-close-btn" id="modal-close-btn">OK</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+    <script>
+        const jsConfetti = new JSConfetti();
+        const firebaseConfig = {
+            apiKey: "AIzaSyBG1ZPt3VMGIKuGflHdRecSZHx5puY99Xs",
+            authDomain: "error-57ad4.firebaseapp.com",
+            databaseURL: "https://error-57ad4-default-rtdb.firebaseio.com",
+            projectId: "error-57ad4",
+            storageBucket: "error-57ad4.appspot.com",
+            messagingSenderId: "445412492654",
+            appId: "1:445412492654:android:2e75c3341086e4eb9a6d7f"
+        };
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+        } catch (error) {
+            console.error('Firebase initialization failed:', error);
+        }
+        const database = firebase.database();
+        const KEYS_DB_PATH = 'prediction-tool-keys';
+        const SERVER_STATUS_PATH = 'serverStatus';
+        const loginMessageElement = document.getElementById('login-message');
+        
+        const smallRed = [0, 2, 4];
+        const smallGreen = [1, 3];
+        const bigRed = [6, 8];
+        const bigGreen = [5, 7, 9];
+        const numberColors = { 0: 'red', 1: 'green', 2: 'red', 3: 'green', 4: 'red', 5: 'green', 6: 'red', 7: 'green', 8: 'red', 9: 'green' };
+
+        let history = [];
+        let pendingPrediction = null;
+        let totalWins = 0;
+        let winStreak = 0;
+        let lossStreak = 0;
+        let lastPeriodNumber = null;
+        let lastTimerUpdate = 0;
+        let currentMode = 'jack';
+        let isOppositeMode = false;
+        let isUltraOppositeMode = false;
+        let isEngineLocked = false;
+        
+        const uiElements = {
+            loginPage: document.getElementById('login-page'),
+            mainPage: document.getElementById('main-page'),
+            loadingOverlay: document.getElementById('loading-overlay'),
+            periodNumber: document.getElementById('periodNumber'),
+            timer: document.getElementById('timer'),
+            currentPrediction: document.getElementById('currentPrediction'),
+            confidenceFill: document.getElementById('confidence-fill'),
+            confidencePercentage: document.getElementById('confidence-percentage'),
+            totalWins: document.getElementById('totalWins'),
+            winRate: document.getElementById('winRate'),
+            winStreak: document.getElementById('winStreak'),
+            lossStreak: document.getElementById('lossStreak'),
+            historyBody: document.getElementById('historyBody'),
+            trendsBody: document.getElementById('trendsBody'),
+            dashboardBtn: document.getElementById('dashboard-btn'),
+            historyBtn: document.getElementById('history-btn'),
+            trendsBtn: document.getElementById('trends-btn'),
+            clearHistoryBtn: document.getElementById('clear-history-btn'),
+            modeSelect: document.getElementById('modeSelect'),
+            dashboardIcons: document.querySelectorAll('#dashboard .dashboard-card .fa-microchip, #dashboard .dashboard-card .fa-chart-pie, #dashboard .stats-item i'),
+        };
+
+        const pages = {
+            dashboard: document.getElementById('dashboard'),
+            history: document.getElementById('history'),
+            trends: document.getElementById('trends')
+        };
+        
+        // --- New Modal Element References ---
+        const timeModal = document.getElementById('time-modal');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const nextActiveTimeSpan = document.getElementById('next-active-time');
+        
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = 'device_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
+
+        async function validateKey(key, deviceId) {
+            try {
+                const snapshot = await database.ref(KEYS_DB_PATH + '/' + key).once('value');
+                const keyData = snapshot.val();
+                if (!keyData || keyData.active === false || (keyData.expireAt && keyData.expireAt < Date.now())) {
+                    return { valid: false, message: 'Invalid or expired key.' };
+                }
+                const devices = keyData.devices || {};
+                const deviceCount = Object.keys(devices).length;
+                const deviceLimit = keyData.deviceLimit || 1;
+                if (!devices[deviceId] && deviceCount >= deviceLimit) {
+                    return { valid: false, message: 'Device limit reached.' };
+                }
+                return { valid: true, keyData };
+            } catch (error) {
+                console.error('Error validating key:', error);
+                return { valid: false, message: 'Network error.' };
+            }
+        }
+
+        async function addDeviceToKey(key, deviceId) {
+            try {
+                await database.ref(KEYS_DB_PATH + '/' + key + '/devices').update({ [deviceId]: true });
+                await database.ref(KEYS_DB_PATH + '/' + key + '/loginHistory').push({ timestamp: new Date().toISOString(), deviceId });
+            } catch (error) {
+                console.error('Error adding device to key:', error);
+                throw new Error('Failed to register device.');
+            }
+        }
+
+        function showPage(pageId) {
+            Object.values(pages).forEach(page => page.classList.add('hidden'));
+            Object.values(pages).forEach(page => page.classList.remove('active'));
+            const activeBtn = document.querySelector('.nav-buttons button.active');
+            if (activeBtn) activeBtn.classList.remove('active');
+            document.getElementById(`${pageId}-btn`).classList.add('active');
+            document.getElementById(pageId).classList.remove('hidden');
+            document.getElementById(pageId).classList.add('active');
+            
+            if (pageId === 'dashboard') startDashboardIconAnimations();
+            if (pageId === 'history') renderHistory();
+            if (pageId === 'trends') renderTrends();
+        }
+        
+        function showLogin() {
+            uiElements.mainPage.classList.add('hidden');
+            uiElements.loginPage.classList.remove('hidden');
+            uiElements.loadingOverlay.classList.add('hidden');
+        }
+
+        function showMain() {
+            uiElements.loginPage.classList.add('hidden');
+            uiElements.mainPage.classList.remove('hidden');
+            uiElements.loadingOverlay.classList.add('hidden');
+            showPage('dashboard');
+        }
+
+        function showLoading() {
+            uiElements.loadingOverlay.classList.remove('hidden');
+            const progressBar = document.getElementById('progress-fill');
+            progressBar.style.width = '0%';
+            setTimeout(() => { progressBar.style.width = '100%'; }, 50);
+            setTimeout(showMain, 3000);
+        }
+
+        async function fetchLastResults() {
+            try {
+                const response = await fetch('https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                return data?.data?.list || [];
+            } catch (e) {
+                console.error('API fetch error:', e);
+                return [];
+            }
+        }
+
+        async function getHistoricalData() {
+            const recent = await fetchLastResults();
+            const historicalData = { numbers: [] };
+            recent.sort((a, b) => b.issueNumber - a.issueNumber).forEach(item => {
+                const num = parseInt(item.number, 10);
+                if (!isNaN(num)) {
+                    historicalData.numbers.push(num);
+                }
+            });
+            return historicalData;
+        }
+
+        async function quantumPredict() {
+            const historyData = await getHistoricalData();
+            if (historyData.numbers.length < 2) {
+                return { size: 'N/A', numbers: [], sizeColor: 'text-primary', numbersColor: 'text-primary', confidence: 0 };
+            }
+
+            let predictedSize = '';
+            let predictedNumbers = [];
+            let sizeColor = '';
+            let numbersColor = '';
+            const predictionConfidence = 90;
+
+            if (currentMode === 'jack') {
+                const lastNumber1 = historyData.numbers[0];
+                const lastNumber2 = historyData.numbers[1];
+
+                let sum = lastNumber1 + lastNumber2;
+                while (sum >= 10) {
+                    sum = Math.floor(sum / 10) + (sum % 10);
+                }
+
+                const frequencyMap = {
+                    0: 4, 1: 5, 2: 6, 3: 7, 4: 0,
+                    5: 1, 6: 2, 7: 3, 8: 4, 9: 7
+                };
+
+                const mappedValue = frequencyMap[sum];
+
+                if (mappedValue >= 5) {
+                    predictedSize = 'Big';
+                    sizeColor = 'pink';
+                    if (lastNumber1 === 0 || lastNumber1 === 5 || lastNumber2 === 0 || lastNumber2 === 5) {
+                        if (numberColors[mappedValue] === 'red') {
+                            predictedNumbers = bigRed.slice();
+                        } else {
+                            predictedNumbers = bigGreen.slice();
+                        }
+                    } else {
+                        if (numberColors[mappedValue] === 'red') {
+                            predictedNumbers = bigGreen.slice();
+                        } else {
+                            predictedNumbers = bigRed.slice();
+                        }
+                    }
+                } else {
+                    predictedSize = 'Small';
+                    sizeColor = 'orange';
+                    if (lastNumber1 === 0 || lastNumber1 === 5 || lastNumber2 === 0 || lastNumber2 === 5) {
+                        if (numberColors[mappedValue] === 'red') {
+                            predictedNumbers = smallRed.slice();
+                        } else {
+                            predictedNumbers = smallGreen.slice();
+                        }
+                    } else {
+                        if (numberColors[mappedValue] === 'red') {
+                            predictedNumbers = smallGreen.slice();
+                        } else {
+                            predictedNumbers = smallRed.slice();
+                        }
+                    }
+                }
+
+                numbersColor = numberColors[mappedValue] || 'text-primary';
+
+                if (isOppositeMode) {
+                    predictedSize = (predictedSize === 'Big') ? 'Small' : 'Big';
+                    sizeColor = (predictedSize === 'Big') ? 'pink' : 'orange';
+                    predictedNumbers = [];
+                } else {
+                    const shuffled = predictedNumbers.sort(() => 0.5 - Math.random());
+                    predictedNumbers = shuffled.slice(0, 2);
+                }
+            }
+
+            if (currentMode === '2-rose') {
+                const lastDigit = parseInt(lastPeriodNumber.slice(-1), 10);
+                const predictionMap = {
+                    0: 4, 1: 5, 2: 6, 3: 7, 4: 0,
+                    5: 1, 6: 2, 7: 3, 8: 4, 9: 7
+                };
+                
+                let mappedValue = predictionMap[lastDigit];
+                let mappedValueColor = numberColors[mappedValue];
+
+                if (mappedValue >= 0 && mappedValue <= 4) {
+                    predictedSize = 'Small';
+                    sizeColor = 'red';
+                } else {
+                    predictedSize = 'Big';
+                    sizeColor = 'green';
+                }
+
+                if (mappedValue === 0 || mappedValue === 5) {
+                    numbersColor = mappedValueColor;
+                } else {
+                    numbersColor = (mappedValueColor === 'red') ? 'green' : 'red';
+                }
+
+                if (predictedSize === 'Small') {
+                    predictedNumbers = (numbersColor === 'red') ? smallRed : smallGreen;
+                } else {
+                    predictedNumbers = (numbersColor === 'red') ? bigRed : bigGreen;
+                }
+                
+                if (isUltraOppositeMode) {
+                    predictedSize = (predictedSize === 'Big') ? 'Small' : 'Big';
+                    sizeColor = (predictedSize === 'Big') ? 'green' : 'red';
+                    numbersColor = (numbersColor === 'red') ? 'green' : 'red';
+                    
+                    if (predictedSize === 'Small') {
+                        predictedNumbers = (numbersColor === 'red') ? smallRed : smallGreen;
+                    } else {
+                        predictedNumbers = (numbersColor === 'red') ? bigRed : bigGreen;
+                    }
+                }
+                
+                const shuffled = predictedNumbers.sort(() => 0.5 - Math.random());
+                predictedNumbers = shuffled.slice(0, 2);
+            }
+
+            return {
+                size: predictedSize,
+                numbers: predictedNumbers,
+                numbersColor: numbersColor,
+                sizeColor: sizeColor,
+                confidence: predictionConfidence
+            };
+        }
+        
+        function getNextActiveTime() {
+            const now = new Date();
+            const currentHour = now.getHours();
+
+            if (currentHour >= 10 && currentHour < 19) {
+                return '7:00 PM to 10:00 PM';
+            } else if (currentHour >= 22 || currentHour < 7) {
+                return '7:00 AM to 10:00 AM';
+            } else {
+                return 'Active Now';
+            }
+        }
+
+        function isPredictionTime() {
+            const now = new Date();
+            const hour = now.getHours();
+            return (hour >= 7 && hour < 10) || (hour >= 19 && hour < 22);
+        }
+        
+        function updatePredictionDisplay() {
+            if (isEngineLocked) {
+                const timeRange = getNextActiveTime();
+                uiElements.currentPrediction.textContent = `LOCKED. Prediction available from ${timeRange}.`;
+                uiElements.confidenceFill.style.width = '0%';
+                uiElements.confidencePercentage.textContent = '0%';
+                pendingPrediction = null;
+            } else if (isPredictionTime()) {
+                generatePrediction(lastPeriodNumber);
+            } else {
+                uiElements.currentPrediction.textContent = 'ENGINE INACTIVE';
+                uiElements.confidenceFill.style.width = '0%';
+                uiElements.confidencePercentage.textContent = '0%';
+                pendingPrediction = null;
+            }
+        }
+
+        async function updatePeriodAndTimer() {
+            const now = new Date();
+            const currentTime = now.getTime();
+            if (currentTime - lastTimerUpdate < 1000) return;
+            lastTimerUpdate = currentTime;
+            
+            const utcHour = now.getUTCHours();
+            const utcMinute = now.getUTCMinutes();
+            const utcSecond = now.getUTCSeconds();
+            const totalMinutes = utcHour * 60 + utcMinute;
+            
+            const year = now.getUTCFullYear();
+            const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(now.getUTCDate()).padStart(2, '0');
+            const periodNumber = `${year}${month}${day}1000${10001 + totalMinutes}`;
+            const remainingSeconds = 60 - utcSecond;
+
+            if (lastPeriodNumber !== periodNumber) {
+                if (pendingPrediction && lastPeriodNumber) {
+                    try {
+                        await checkPendingResult(lastPeriodNumber);
+                    } catch (err) {
+                        console.error('Error checking pending result:', err);
+                    }
+                }
+                lastPeriodNumber = periodNumber;
+                uiElements.periodNumber.textContent = periodNumber;
+                
+                // Check if the engine should be unlocked
+                if (isEngineLocked && isPredictionTime()) {
+                    isEngineLocked = false;
+                    showNotification('mode-activate', 'ENGINE ACTIVATED');
+                }
+                updatePredictionDisplay();
+            }
+            
+            uiElements.timer.textContent = `00:${String(remainingSeconds).padStart(2, '0')}`;
+            updateRealTimeStats();
+            if (pages.history.classList.contains('active')) renderHistory();
+            if (pages.trends.classList.contains('active')) renderTrends();
+        }
+
+        async function generatePrediction(period) {
+            uiElements.currentPrediction.textContent = 'Analyzing...';
+            uiElements.currentPrediction.classList.remove('red', 'green', 'pink', 'orange');
+            uiElements.confidenceFill.style.width = '0%';
+            uiElements.confidencePercentage.textContent = '0%';
+
+            try {
+                const prediction = await quantumPredict();
+                
+                const sizePart = `<span class="${prediction.sizeColor}">${prediction.size.toUpperCase()}</span>`;
+                let displayHtml = sizePart;
+
+                if (isOppositeMode || isUltraOppositeMode) {
+                    displayHtml = `(OPPOSITE) ${sizePart}`;
+                }
+                
+                if (prediction.numbers.length > 0) {
+                    const numbersPart = `<span class="numbers-display ${prediction.numbersColor}">(${prediction.numbers.join(', ')})</span>`;
+                    displayHtml = displayHtml + ` / ${numbersPart}`;
+                }
+
+                uiElements.currentPrediction.innerHTML = displayHtml;
+                uiElements.confidenceFill.style.width = `${prediction.confidence}%`;
+                uiElements.confidencePercentage.textContent = `${prediction.confidence}%`;
+
+                history.unshift({
+                    period,
+                    predictedSize: prediction.size,
+                    numbers: prediction.numbers,
+                    numbersColor: prediction.numbersColor,
+                    confidence: prediction.confidence,
+                    status: 'Pending',
+                    mode: currentMode,
+                    isOpposite: isOppositeMode || isUltraOppositeMode,
+                    numberWin: false
+                });
+                pendingPrediction = history[0];
+            } catch (error) {
+                console.error("Error in generatePrediction:", error);
+                uiElements.currentPrediction.textContent = 'Prediction Error';
+            }
+        }
+
+        async function checkPendingResult(period) {
+            if (!pendingPrediction || pendingPrediction.period !== period) return;
+
+            const apiResults = await fetchLastResults();
+            const latest = apiResults.find(item => item.issueNumber === period);
+
+            if (latest) {
+                const actualNumber = parseInt(latest.number, 10);
+                const actualSize = [5, 6, 7, 8, 9].includes(actualNumber % 10) ? 'Big' : 'Small';
+                const actualColor = numberColors[actualNumber % 10];
+                
+                let isWin = false;
+                let numberWin = false;
+
+                if (pendingPrediction.numbers.includes(actualNumber % 10)) {
+                    isWin = true;
+                    numberWin = true;
+                } else if (pendingPrediction.predictedSize === actualSize) {
+                    isWin = true;
+                }
+
+                pendingPrediction.status = isWin ? 'WIN' : 'LOSS';
+                pendingPrediction.numberWin = numberWin;
+                pendingPrediction.apiValue = `${actualSize.toUpperCase()} / ${actualNumber}`;
+
+                if (isWin) {
+                    totalWins++;
+                    winStreak++;
+                    lossStreak = 0;
+                    if (currentMode === 'jack' && pendingPrediction.isOpposite) {
+                        isOppositeMode = false;
+                        showNotification('win', `Opposite Mode Succeeded!`);
+                    } else if (currentMode === '2-rose' && pendingPrediction.isOpposite) {
+                        isUltraOppositeMode = false;
+                        showNotification('win', `Opposite Mode Succeeded!`);
+                    } else {
+                        showNotification('win', `WIN! Predicted ${pendingPrediction.predictedSize.toUpperCase()}${numberWin ? ' and Number' : ''}`);
+                    }
+                    jsConfetti.addConfetti({ confettiColors: ['#32CD32', '#00BFFF', '#FFD700'] });
+                } else {
+                    lossStreak++;
+                    winStreak = 0;
+                    showNotification('loss', `LOSS. Actual was ${actualSize.toUpperCase()} (${actualNumber})`);
+                    if (currentMode === 'jack' && lossStreak >= 4 && !isOppositeMode) {
+                        isOppositeMode = true;
+                        showNotification('mode-activate', 'OPPOSITE MODE ACTIVATE');
+                    }
+                    if (currentMode === '2-rose' && lossStreak >= 4 && !isUltraOppositeMode) {
+                        isUltraOppositeMode = true;
+                        showNotification('mode-activate', 'OPPOSITE MODE ACTIVATE');
+                    }
+                }
+            } else {
+                pendingPrediction.status = 'Pending';
+            }
+        }
+        
+        function updateRealTimeStats() {
+            const totalBets = history.filter(h => h.status !== 'Pending').length;
+            const currentWinRate = totalBets > 0 ? ((totalWins / totalBets) * 100).toFixed(2) : 0;
+            
+            uiElements.totalWins.textContent = totalWins;
+            uiElements.winRate.textContent = `${currentWinRate}%`;
+            uiElements.winStreak.textContent = winStreak;
+            uiElements.lossStreak.textContent = lossStreak;
+        }
+
+        function renderHistory() {
+            uiElements.historyBody.innerHTML = history.map(h => {
+                const statusClass = h.status === 'Pending' ? 'pending' : h.status.toLowerCase();
+                
+                let predictionDisplay = `<span class="${h.mode === 'jack' && h.isOpposite ? (h.predictedSize === 'Big' ? 'pink' : 'orange') : h.numbersColor}">${h.predictedSize.toUpperCase()}</span>`;
+                let resultDisplay = 'Pending';
+                let winBadge = '';
+
+                if (h.isOpposite) {
+                    predictionDisplay = `(OPPOSITE) ${predictionDisplay}`;
+                }
+                
+                if (h.numbers.length > 0) {
+                    predictionDisplay += ` / <span class="numbers-display ${h.numbersColor}">(${h.numbers.join(', ')})</span>`;
+                }
+                
+                if (h.status !== 'Pending') {
+                    resultDisplay = `${h.apiValue}`;
+                    if (h.status === 'WIN') {
+                        winBadge = `<span class="win-badge">${h.numberWin ? 'WIN + JK' : 'WIN'}</span>`;
+                    }
+                }
+
+                return `
+                    <div class="history-card ${statusClass}">
+                        ${winBadge}
+                        <div class="history-content">
+                            <span><i class="fas fa-calendar"></i> Period: <span class="value">${h.period || 'N/A'}</span></span>
+                            <span><i class="fas fa-microchip"></i> Prediction: <span class="value">${predictionDisplay}</span></span>
+                            <span><i class="fas fa-check-circle"></i> Result: <span class="value">${resultDisplay}</span></span>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+        
+        function getTopWinningNumbers() {
+            const wins = history.filter(h => h.status === 'WIN' && h.numberWin);
+            const numberCounts = {};
+            wins.forEach(h => {
+                h.numbers.forEach(num => {
+                    numberCounts[num] = (numberCounts[num] || 0) + 1;
+                });
+            });
+            const sorted = Object.entries(numberCounts).sort(([, a], [, b]) => b - a);
+            return sorted.slice(0, 5).map(([number, count]) => ({ number: parseInt(number), count }));
+        }
+
+        function getTopWinningSizes() {
+            const winCounts = { big: 0, small: 0 };
+            history.filter(h => h.status === 'WIN').forEach(h => {
+                const actualSize = h.apiValue.includes('BIG') ? 'big' : 'small';
+                if (h.predictedSize.toLowerCase() === actualSize) {
+                    winCounts[actualSize]++;
+                }
+            });
+            return Object.entries(winCounts).sort(([, a], [, b]) => b - a);
+        }
+
+        function renderTrends() {
+            const totalPredictions = history.filter(h => h.status !== 'Pending').length;
+            if (totalPredictions === 0) {
+                uiElements.trendsBody.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">No insights available. Check back after a few rounds.</p>';
+                return;
+            }
+            
+            const winRate = (totalWins / totalPredictions * 100).toFixed(2);
+            const topNumbers = getTopWinningNumbers();
+            const topSizes = getTopWinningSizes();
+
+            let trendsHTML = `
+                <div class="trends-card">
+                    <div class="card-header">
+                        <i class="fas fa-percentage icon-blue"></i>
+                        <span class="card-title">Overall Performance</span>
+                    </div>
+                    <div class="insights-grid">
+                        <div class="insight-item">
+                            <span class="title">Win Rate</span>
+                            <span class="value">${winRate}%</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="title">Total Rounds</span>
+                            <span class="value">${totalPredictions}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trends-card">
+                    <div class="card-header">
+                        <i class="fas fa-sort-numeric-down icon-gold"></i>
+                        <span class="card-title">Top Winning Numbers</span>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;">
+                        ${topNumbers.map(item => `
+                            <div class="winning-number ${numberColors[item.number]}">
+                                ${item.number}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="trends-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line icon-purple"></i>
+                        <span class="card-title">Size Trend Analysis</span>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;">
+                        ${topSizes.map(([size, count]) => `
+                            <div class="winning-number ${size === 'big' ? 'purple' : 'orange'}">
+                                ${size.toUpperCase()} (${count})
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            uiElements.trendsBody.innerHTML = trendsHTML;
+        }
+        
+        function clearHistory() {
+            history = [];
+            totalWins = 0;
+            winStreak = 0;
+            lossStreak = 0;
+            lastPeriodNumber = null;
+            pendingPrediction = null;
+            isOppositeMode = false;
+            isUltraOppositeMode = false;
+            renderHistory();
+            renderTrends();
+            updateRealTimeStats();
+            uiElements.currentPrediction.innerHTML = 'Waiting for Quantum Signal...';
+            uiElements.confidenceFill.style.width = '0%';
+            uiElements.confidencePercentage.textContent = '0%';
+        }
+        
+        function showNotification(type, message) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.getElementById('notification-area').appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function startDashboardIconAnimations() {
+            uiElements.dashboardIcons.forEach(icon => {
+                icon.style.animation = 'none';
+                void icon.offsetWidth;
+                icon.style.animation = 'pulse 1.5s ease-in-out infinite';
+            });
+        }
+
+        // --- New JavaScript for Modal ---
+        function showTimingModal() {
+            const nextTime = getNextActiveTime();
+            nextActiveTimeSpan.textContent = nextTime;
+            timeModal.classList.add('active');
+        }
+
+        function hideTimingModal() {
+            timeModal.classList.remove('active');
+        }
+
+        // Add event listeners for the new modal
+        modalCloseBtn.addEventListener('click', hideTimingModal);
+        timeModal.addEventListener('click', (e) => {
+            if (e.target === timeModal) {
+                hideTimingModal();
+            }
+        });
+        // --- End New JavaScript for Modal ---
+        
+        document.querySelector('.login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const loginKey = document.getElementById('loginKey').value.trim();
+            const deviceId = getDeviceId();
+            loginMessageElement.textContent = '';
+            
+            try {
+                const serverSnap = await database.ref(SERVER_STATUS_PATH).once('value');
+                if (serverSnap.val() === 'off') {
+                    loginMessageElement.textContent = 'Server is offline. Try again later.';
+                    return;
+                }
+
+                const { valid, message, keyData } = await validateKey(loginKey, deviceId);
+                if (!valid) {
+                    loginMessageElement.textContent = message;
+                    return;
+                }
+                
+                if (!keyData.devices || !keyData.devices[deviceId]) {
+                    await addDeviceToKey(loginKey, deviceId);
+                }
+                
+                localStorage.setItem('loginKey', loginKey);
+                showLoading();
+            } catch (error) {
+                console.error('Login error:', error);
+                loginMessageElement.textContent = 'An unexpected error occurred. Please try again.';
+            }
+        });
+
+        uiElements.dashboardBtn.addEventListener('click', () => showPage('dashboard'));
+        uiElements.historyBtn.addEventListener('click', () => showPage('history'));
+        uiElements.trendsBtn.addEventListener('click', () => showPage('trends'));
+        uiElements.clearHistoryBtn.addEventListener('click', clearHistory);
+
+        uiElements.modeSelect.addEventListener('change', (e) => {
+            const newMode = e.target.value;
+            if (newMode !== currentMode) {
+                currentMode = newMode;
+                isOppositeMode = false;
+                isUltraOppositeMode = false;
+                isEngineLocked = true;
+                const nextTime = getNextActiveTime();
+                showNotification('mode-activate', `MODE SWITCHED. Engine will start at ${nextTime}.`);
+            }
+        });
+        
+        window.addEventListener('load', async () => {
+            const savedKey = localStorage.getItem('loginKey');
+            if (savedKey) {
+                const { valid, message, keyData } = await validateKey(savedKey, getDeviceId());
+                if (valid && keyData.expireAt > Date.now()) {
+                    showLoading();
+                    // Check if engine is locked and show the modal after loading
+                    setTimeout(() => {
+                        if (!isPredictionTime()) {
+                            showTimingModal();
+                        }
+                    }, 3000); // 3 seconds to let the loading screen finish
+                } else {
+                    showLogin();
+                    if (!valid) loginMessageElement.textContent = message;
+                }
+            } else {
+                showLogin();
+            }
+        });
+
+        setInterval(updatePeriodAndTimer, 1000);
+    </script>
+</body>
+</html>
