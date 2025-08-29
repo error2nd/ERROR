@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ERROR X ADVANCE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght[700]&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <style>
+        :root {
+            --bg-dark: #0A0A1F;
+            --bg-transparent: rgba(18, 18, 50, 0.5);
+            --border-transparent: rgba(255, 255, 255, 0.1);
+            --primary-color: #5D5DFF; /* Blue */
+            --accent-color: #8A2BE2; /* Purple */
+            --text-light: #E0E0FF;
+            --text-muted: #A0A0C0;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --win-color: #32CD32;
+            --loss-color: #FF6347;
+            --pending-color: #FFD700;
+            --win-jk-color: #FF00FF;
+            --blur-strength: 15px;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            animation: none;
+        }
+        
+        .dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: moveDot 20s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .dot:nth-child(2) { top: 70%; left: 90%; animation-delay: 4s; }
+        .dot:nth-child(3) { top: 85%; left: 30%; animation-delay: 8s; }
+        .dot:nth-child(4) { top: 10%; left: 80%; animation-delay: 12s; }
+        .dot:nth-child(5) { top: 50%; left: 50%; animation-delay: 16s; }
+        .dot:nth-child(6) { top: 40%; left: 20%; animation-delay: 2s; }
+        .dot:nth-child(7) { top: 60%; left: 80%; animation-delay: 6s; }
+        .dot:nth-child(8) { top: 90%; left: 15%; animation-delay: 10s; }
+        .dot:nth-child(9) { top: 5%; left: 40%; animation-delay: 14s; }
+        .dot:nth-child(10) { top: 30%; left: 60%; animation-delay: 18s; }
+
+        @keyframes moveDot {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.6; }
+            25% { transform: translate(30vw, -10vh) scale(1.2) rotate(45deg); opacity: 0.8; }
+            50% { transform: translate(60vw, 20vh) scale(1.5) rotate(90deg); opacity: 1; }
+            75% { transform: translate(10vw, 50vh) scale(1.2) rotate(135deg); opacity: 0.8; }
+            100% { transform: translate(0, 0) scale(1) rotate(180deg); opacity: 0.6; }
+        }
+
+        .hidden { display: none !important; }
+        
+        .maintenance-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 500;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+        .maintenance-overlay span { font-size: 3rem; margin-bottom: 20px; color: var(--primary-color); }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 10;
+            animation: fadeInScaleUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        @keyframes fadeInScaleUp {
+            from { opacity: 0; transform: scale(0.9) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .login-box {
+            background: var(--bg-transparent);
+            border-radius: 20px;
+            border: 1px solid var(--border-transparent);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+        }
+        .title { font-size: 2.5em; color: var(--primary-color); font-weight: 700; text-shadow: 0 0 10px rgba(93, 93, 255, 0.5); }
+        .subtitle { font-size: 1em; color: var(--text-muted); margin-bottom: 30px; }
+        .input-group { margin-bottom: 25px; position: relative; }
+        .input-group i {
+            position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+        input[type="password"] {
+            width: 100%; padding: 18px 20px 18px 60px; border: 2px solid var(--border-transparent); border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2); color: var(--text-light); font-size: 1.1em; box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        input[type="password"]:focus {
+            border-color: var(--primary-color); outline: none; box-shadow: 0 0 10px rgba(93, 93, 255, 0.8);
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .btn {
+            display: block; width: 100%; padding: 18px; border: none; border-radius: 12px; font-size: 1.1em;
+            font-weight: 600; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); text-decoration: none; color: #ffffff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn-login { background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); }
+        .btn-login:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 25px rgba(93, 93, 255, 0.4); }
+        .btn-telegram {
+            display: inline-flex; justify-content: center; align-items: center; gap: 10px;
+            background: linear-gradient(45deg, #0088cc, #0077b3); color: #ffffff; padding: 14px 28px; font-size: 1em;
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.2); margin-top: 25px; border-radius: 12px;
+            width: auto;
+        }
+        .btn-telegram:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0, 136, 204, 0.4); }
+        .divider { margin: 30px 0; display: flex; align-items: center; color: var(--text-muted); }
+        .divider::before, .divider::after { content: ''; flex-grow: 1; height: 1px; background-color: var(--border-transparent); }
+        .divider span { padding: 0 16px; }
+        .footer-text { font-size: 0.85em; color: var(--text-muted); margin-top: 30px; }
+        .login-message { margin-top: 15px; font-size: 0.95em; color: var(--loss-color); }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-align: center;
+            padding: 22px 0;
+            background-color: transparent;
+            color: var(--text-light);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: none;
+        }
+        .header-text { font-size: 28px; font-weight: 700; text-shadow: 0 0 8px rgba(93, 93, 255, 0.3); }
+
+        .main-container {
+            width: 100vw;
+            max-width: 450px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: transparent;
+            box-shadow: none;
+            z-index: 2;
+        }
+        .app-content {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: transparent;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transform: translateX(100%);
+            display: flex;
+            flex-direction: column;
+        }
+        .page-section.active { transform: translateX(0); }
+        #home.page-section { z-index: 2; }
+        #history.page-section { z-index: 1; }
+        .home-content, .history-content-wrapper {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+        .info-card {
+            background-color: var(--bg-transparent);
+            border: 1px solid var(--border-transparent);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            animation: fadeIn 0.8s ease-out;
+            transition: transform 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+        }
+        .info-card:hover { transform: translateY(-5px); }
+        .info-card-title {
+            font-size: 0.95em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .info-card-value {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-shadow: 0 0 5px rgba(93, 93, 255, 0.5);
+        }
+
+        .real-time-analysis-section {
+            background-color: var(--bg-transparent);
+            border: 1px solid var(--border-transparent);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 25px;
+            animation: fadeIn 1s ease-out;
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+        }
+        .section-title { font-size: 1.2em; font-weight: 600; margin-bottom: 15px; }
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-transparent);
+            transition: transform 0.2s ease;
+        }
+        .stats-item:last-child { border-bottom: none; }
+        .stats-item span:first-child { color: var(--text-muted); }
+        .stats-item span:last-child { font-weight: 500; color: var(--primary-color); }
+        .stats-item:hover { transform: translateX(5px); }
+        .energy-shake { animation: shake 0.5s ease-in-out infinite; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(0); }
+            75% { transform: translateX(5px); }
+        }
+
+        .nav-buttons { display: flex; justify-content: space-around; padding: 15px; background-color: transparent; border-top: 1px solid var(--border-transparent); }
+        .nav-buttons button {
+            background: transparent; color: var(--text-muted); padding: 12px 18px; border-radius: 10px;
+            border: none; font-size: 14px; text-align: center; cursor: pointer; transition: all 0.3s ease;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .nav-buttons button i { font-size: 22px; margin-bottom: 6px; }
+        .nav-buttons button.active { color: var(--primary-color); background: rgba(93, 93, 255, 0.1); }
+        .nav-buttons button:hover { transform: translateY(-5px); color: var(--primary-color); }
+
+        .history-card {
+            margin-top: 15px; padding: 18px; font-size: 14px; position: relative; border-radius: 12px;
+            background-color: var(--bg-transparent);
+            border: 1px solid var(--border-transparent);
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+        }
+        .history-card:hover { transform: translateY(-5px); }
+        .history-card.win { background-color: rgba(50, 205, 50, 0.1); border-color: var(--win-color); }
+        .history-card.loss { background-color: rgba(255, 99, 71, 0.1); border-color: var(--loss-color); }
+        .history-card.pending { background-color: rgba(255, 215, 0, 0.1); border-color: var(--pending-color); }
+        .history-content { display: flex; flex-direction: column; gap: 10px; }
+        .history-content span { display: flex; align-items: center; gap: 10px; }
+        .history-content i { font-size: 20px; color: var(--text-muted); }
+        .history-content .value { color: var(--text-light); font-weight: 500; }
+        
+        .history-scroll-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-right: 8px;
+        }
+        .history-scroll-container::-webkit-scrollbar { width: 8px; }
+        .history-scroll-container::-webkit-scrollbar-thumb { background-color: var(--primary-color); border-radius: 4px; }
+        .history-scroll-container::-webkit-scrollbar-track { background-color: transparent; }
+
+        .clear-btn { background: var(--loss-color); color: #ffffff; border: none; padding: 12px 20px; margin-top: 20px; border-radius: 10px; font-weight: 500; transition: background-color 0.3s ease; }
+        .clear-btn:hover { background: #e35489; }
+        
+        .win-trophy, .loss-signal, .pending-spinner { display: inline-block; }
+        .win-trophy::before { content: '\f091'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--win-color); animation: bounce 2s infinite; }
+        .loss-signal::before { content: '\f071'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--loss-color); animation: shake 0.5s infinite; }
+        .pending-spinner::before { content: '\f110'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--pending-color); animation: spin 1s linear infinite; }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .notification {
+            position: fixed; top: 30px; left: 50%; transform: translateX(-50%); padding: 12px 25px;
+            border-radius: 10px; font-weight: 500; color: #ffffff; z-index: 1000;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            animation: fadeInOut 3s ease-in-out forwards;
+        }
+        .notification.win { background-color: var(--win-color); }
+        .notification.loss { background-color: var(--loss-color); }
+        .notification.color-mode { background-color: var(--primary-color); }
+        @keyframes fadeInOut { 0% { opacity: 0; transform: translate(-50%, -20px); } 10% { opacity: 1; transform: translate(-50%, 0); } 90% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -20px); } }
+        
+        .win-streak-badge {
+            position: fixed; top: 30px; right: 30px; background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: var(--bg-dark); padding: 8px 16px; font-size: 14px; font-weight: 500;
+            border-radius: 8px; box-shadow: 0 0 15px rgba(93, 93, 255, 0.7); animation: popBadge 0.4s ease, glowPulse 1s infinite;
+            z-index: 9999;
+        }
+        @keyframes popBadge { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes glowPulse { 0%, 100% { box-shadow: 0 0 15px rgba(93, 93, 255, 0.7); } 50% { box-shadow: 0 0 20px #ffffff; } }
+        
+        .analysing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 31, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .analysing-overlay.hidden { display: none; }
+        .analysing-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-transparent);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(93, 93, 255, 0.7);
+            overflow: hidden;
+            animation: pulseGlow 1.5s infinite alternate;
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 20px rgba(93, 93, 255, 0.5); transform: scale(1); }
+            100% { box-shadow: 0 0 60px rgba(93, 93, 255, 0.9); transform: scale(1.03); }
+        }
+        .analysing-hex-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill="none" stroke="rgba(93, 93, 255, 0.4)" stroke-width="1"/></svg>');
+            background-size: 20%;
+            animation: hexGrid 15s infinite linear;
+        }
+        @keyframes hexGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 100%; }
+        }
+        .analysing-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8em;
+            color: var(--text-light);
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+            margin-bottom: 15px;
+            z-index: 1;
+        }
+        .analysing-progress {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+        .analysing-hex {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill="none" stroke="rgba(93, 93, 255, 0.8)" stroke-width="2"/></svg>') no-repeat center;
+            background-size: 80%;
+            animation: rotateHex 6s linear infinite;
+        }
+        @keyframes rotateHex {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .analysing-icon {
+            font-size: 3.5em;
+            color: var(--primary-color);
+            animation: pulseIcon 1.5s infinite;
+        }
+        @keyframes pulseIcon {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .analysing-subtitle {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-top: 15px;
+            text-align: center;
+            padding: 0 30px;
+            z-index: 1;
+            animation: textFade 3s infinite;
+        }
+        @keyframes textFade {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 31, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .loading-box {
+            background: var(--bg-transparent);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            animation: scaleUp 0.5s ease-in-out;
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+        }
+        .loading-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+        .progress-bar {
+            width: 200px;
+            height: 10px;
+            background: var(--bg-transparent);
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--border-transparent);
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0;
+            transition: width 3s linear;
+        }
+
+        .win-glow {
+            animation: glow-pulse 1s infinite alternate;
+        }
+        @keyframes glow-pulse {
+            0% { box-shadow: 0 0 10px rgba(50, 205, 50, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(50, 205, 50, 1), 0 0 30px rgba(50, 205, 50, 0.8); }
+        }
+
+        .win-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--bg-dark);
+            background: var(--win-color);
+            box-shadow: 0 0 10px var(--win-color);
+            animation: badge-pop 0.3s ease-out;
+            transform: rotate(10deg);
+        }
+        .win-jk-badge {
+            background: var(--win-jk-color);
+            box-shadow: 0 0 10px var(--win-jk-color);
+        }
+        @keyframes badge-pop {
+            0% { transform: scale(0.5) rotate(0); }
+            100% { transform: scale(1) rotate(10deg); }
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999; /* Changed z-index to 999 to be on top of app but below notifications */
+            pointer-events: none;
+        }
+
+        .nav-buttons button:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .nav-buttons button.active {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 450px) {
+            .main-container { width: 100vw; height: 100vh; max-width: 100%; }
+            .page-section { padding: 15px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .history-content-wrapper { max-height: calc(100vh - 160px); }
+            .history-section { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="confetti-canvas" style="display: none;"></canvas>
+
+    <div class="background-animation">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+
+    <div id="maintenance-overlay" class="maintenance-overlay hidden">
+        <span><i class="fas fa-tools"></i></span>
+        <div>SERVER UNDER MAINTENANCE PLEASE WAIT</div>
+    </div>
+
+    <div id="login-page" class="login-container">
+        <div class="login-box">
+            <h1 class="title">SECURE ACCESS</h1>
+            <p class="subtitle">Enter your login key to proceed.</p>
+            <form class="login-form">
+                <div class="input-group">
+                    <i class="fas fa-key"></i>
+                    <input type="password" id="loginKey" placeholder="Enter Login Key" required>
+                </div>
+                <button type="submit" class="btn btn-login">Login</button>
+                <div id="login-message" class="login-message"></div>
+            </form>
+            <div class="divider">
+                <span>OR</span>
+            </div>
+            <a href="https://t.me/error_2nd" class="btn btn-telegram" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-telegram-plane"></i> DM TO BUY
+            </a>
+            <p class="footer-text">Need help? Contact support.</p>
+        </div>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-box">
+            <div class="loading-text">CONNECTING TO SERVER</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="analysing-overlay" class="analysing-overlay hidden">
+        <div class="analysing-container">
+            <div class="analysing-hex-grid"></div>
+            <div class="analysing-title">QUANTUM AI PROCESSING</div>
+            <div class="analysing-progress">
+                <div class="analysing-hex"></div>
+                <i class="fas fa-microchip analysing-icon"></i>
+            </div>
+            <div class="analysing-subtitle">Analyzing historical patterns and optimizing predictive algorithms...</div>
+        </div>
+    </div>
+
+    <div id="main-page" class="hidden">
+        <div class="main-container">
+            <div class="header">
+                <div class="header-text">ERROR X PRO LVL</div>
+            </div>
+            <div class="nav-buttons">
+                <button id="home-btn" onclick="showPage('home')">
+                    <i class="fas fa-satellite-dish"></i>Home
+                </button>
+                <button id="history-btn" onclick="showPage('history')">
+                    <i class="fas fa-chart-line"></i>History
+                </button>
+            </div>
+            <div class="app-content">
+                <div id="home" class="page-section active">
+                    <div class="home-content">
+                        <div class="info-grid">
+                            <div class="info-card">
+                                <span class="info-card-title">PERIOD</span>
+                                <span id="periodNumber" class="info-card-value">Loading...</span>
+                            </div>
+                            <div class="info-card">
+                                <span class="info-card-title">TIME LEFT</span>
+                                <span id="timer" class="info-card-value">00:00</span>
+                            </div>
+                            <div class="info-card" id="prediction-card">
+                                <span class="info-card-title">PREDICTION</span>
+                                <span id="currentPrediction" class="info-card-value">Waiting...</span>
+                            </div>
+                        </div>
+                        <div class="real-time-analysis-section" id="energy-section">
+                            <div class="section-title">Real-Time Analysis</div>
+                            <div id="real-time-stats">
+                                <div class="stats-item"><span>Total Predictions:</span> <span class="value" id="totalPredictions">0</span></div>
+                                <div class="stats-item"><span>Total Wins:</span> <span class="value" id="totalWins">0</span></div>
+                                <div class="stats-item"><span>Total Losses:</span> <span class="value" id="totalLosses">0</span></div>
+                                <div class="stats-item"><span>Win Rate:</span> <span class="value" id="winRate">0%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="history" class="page-section">
+                    <div class="history-content-wrapper">
+                        <div class="history-section">
+                            <div class="section-title">Prediction History</div>
+                            <div id="historyBody" class="history-scroll-container"></div>
+                            <button class="clear-btn" onclick="clearHistory()">
+                                <i class="fas fa-trash-alt"></i> Clear History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="win-streak-badge" class="win-streak-badge hidden"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBG1ZPt3VMGIKuGflHdRecSZHx5puY99Xs",
+            authDomain: "error-57ad4.firebaseapp.com",
+            databaseURL: "https://error-57ad4-default-rtdb.firebaseio.com",
+            projectId: "error-57ad4",
+            storageBucket: "error-57ad4.appspot.com",
+            messagingSenderId: "445412492654",
+            appId: "1:445412492654:android:2e75c3341086e4eb9a6d7f"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const KEYS_DB_PATH = 'admin_panels/panelA/keys';
+        const SERVER_STATUS_PATH = 'serverStatus';
+        const loginMessageElement = document.getElementById('login-message');
+        
+        let logoutTimerId = null; 
+
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = 'device_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
+
+        function showMaintenance() {
+            document.getElementById('maintenance-overlay').classList.remove('hidden');
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('loading-overlay').classList.add('hidden');
+            document.getElementById('analysing-overlay').classList.add('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('maintenance-overlay').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('loading-overlay').classList.add('hidden');
+            document.getElementById('analysing-overlay').classList.add('hidden');
+        }
+
+        function showMain() {
+            document.getElementById('maintenance-overlay').classList.add('hidden');
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('main-page').classList.remove('hidden');
+            document.getElementById('loading-overlay').classList.add('hidden');
+            document.getElementById('analysing-overlay').classList.add('hidden');
+        }
+
+        function showLoading() {
+            document.getElementById('maintenance-overlay').classList.add('hidden');
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            document.getElementById('analysing-overlay').classList.add('hidden');
+            const progressBar = document.getElementById('progress-fill');
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 50);
+            setTimeout(() => {
+                showMain();
+            }, 3000);
+        }
+
+        function showAnalysing() {
+            document.getElementById('analysing-overlay').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('analysing-overlay').classList.add('hidden');
+            }, 5000);
+        }
+
+        function showLoginMessage(message) {
+            loginMessageElement.textContent = message;
+            loginMessageElement.style.color = '#ff6347';
+        }
+
+        function validateKey(key, deviceId, callback) {
+            database.ref(KEYS_DB_PATH + '/' + key).once('value').then((snapshot) => {
+                const keyData = snapshot.val();
+                if (!keyData || keyData.active === false) {
+                    callback(false, 'Invalid key');
+                    return;
+                }
+                const now = Date.now();
+                if (keyData.expireAt < now) {
+                    callback(false, 'Key expired');
+                    return;
+                }
+                const devices = keyData.devices || {};
+                const deviceCount = Object.keys(devices).length;
+
+                if (devices[deviceId]) {
+                    callback(true, keyData);
+                    return;
+                }
+
+                if (deviceCount >= keyData.deviceLimit) {
+                    callback(false, 'Device limit reached');
+                    return;
+                }
+                callback(true, keyData);
+            }).catch((error) => {
+                console.error('Error validating key:', error);
+                callback(false, 'Error validating key');
+            });
+        }
+
+        function addDeviceToKey(key, deviceId) {
+            const timestamp = new Date().toISOString();
+            database.ref(KEYS_DB_PATH + '/' + key + '/devices').update({ [deviceId]: true });
+            database.ref(KEYS_DB_PATH + '/' + key + '/loginHistory').push({ timestamp: timestamp, deviceId: deviceId });
+        }
+        
+        database.ref(SERVER_STATUS_PATH).on('value', (snap) => {
+            if (snap.exists() && snap.val() === 'off') {
+                showMaintenance();
+            } else {
+                const savedKey = localStorage.getItem('loginKey');
+                const deviceId = getDeviceId();
+                if (savedKey) {
+                    validateKey(savedKey, deviceId, (valid, keyData) => {
+                        if (valid) {
+                            if (logoutTimerId) {
+                                clearTimeout(logoutTimerId);
+                            }
+                            const expiryTimeout = keyData.expireAt - Date.now();
+                            logoutTimerId = setTimeout(() => {
+                                showLogin();
+                                logoutTimerId = null;
+                            }, expiryTimeout);
+
+                            showLoading();
+                        } else {
+                            localStorage.removeItem('loginKey');
+                            showLogin();
+                        }
+                    });
+                } else {
+                    showLogin();
+                }
+            }
+        });
+
+        document.querySelector('.login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const loginKey = document.getElementById('loginKey').value.trim();
+            const deviceId = getDeviceId();
+            loginMessageElement.textContent = '';
+
+            database.ref(SERVER_STATUS_PATH).once('value').then((snap) => {
+                if (snap.exists() && snap.val() === 'off') {
+                    showMaintenance();
+                    return;
+                }
+                validateKey(loginKey, deviceId, (valid, keyData) => {
+                    if (!valid) {
+                        showLoginMessage(keyData);
+                        return;
+                    }
+                    if (!keyData.devices || !keyData.devices[deviceId]) {
+                        addDeviceToKey(loginKey, deviceId);
+                    }
+                    localStorage.setItem('loginKey', loginKey);
+                    
+                    if (logoutTimerId) {
+                        clearTimeout(logoutTimerId);
+                    }
+                    const expiryTimeout = keyData.expireAt - Date.now();
+                    logoutTimerId = setTimeout(() => {
+                        showLogin();
+                        logoutTimerId = null;
+                    }, expiryTimeout);
+                    
+                    showLoading();
+                });
+            });
+        });
+
+        const periodNumberElement = document.getElementById('periodNumber');
+        const timerElement = document.getElementById('timer');
+        const currentPredictionElement = document.getElementById('currentPrediction');
+        const historyBody = document.getElementById('historyBody');
+        const homePage = document.getElementById('home');
+        const historyPage = document.getElementById('history');
+        const predictionCard = document.getElementById('prediction-card');
+        const energySection = document.getElementById('energy-section');
+
+        const numberColors = {
+            0: 'red', 2: 'red', 4: 'red', 6: 'red', 8: 'red',
+            1: 'green', 3: 'green', 5: 'green', 7: 'green', 9: 'green'
+        };
+        const bigNumbers = [5, 6, 7, 8, 9];
+        const smallNumbers = [0, 1, 2, 3, 4];
+        const RED_NUMBERS = [0, 2, 4, 6, 8];
+        const GREEN_NUMBERS = [1, 3, 5, 7, 9];
+
+        let lastPeriodNumber = null;
+        let history = [];
+        let pendingResult = null;
+        let lastTimerUpdate = 0;
+        let winStreak = 0;
+        let totalWins = 0;
+        let totalLosses = 0;
+        let energyShakeInterval = null;
+        let confetti = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('confetti-canvas');
+            if (canvas) {
+                confetti = new JSConfetti({ canvas });
+            }
+            document.getElementById('home-btn').classList.add('active');
+            showPage('home');
+            startEnergyShake();
+        });
+
+        function showPage(id) {
+            const pages = document.querySelectorAll('.page-section');
+            const navButtons = document.querySelectorAll('.nav-buttons button');
+            pages.forEach(p => p.classList.remove('active'));
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            if (id === 'home') {
+                homePage.style.transform = 'translateX(0)';
+                historyPage.style.transform = 'translateX(100%)';
+            } else {
+                homePage.style.transform = 'translateX(-100%)';
+                historyPage.style.transform = 'translateX(0)';
+            }
+            document.getElementById(id).classList.add('active');
+            document.getElementById(id + '-btn').classList.add('active');
+        }
+
+        function startEnergyShake() {
+            if (energyShakeInterval) clearInterval(energyShakeInterval);
+            energyShakeInterval = setInterval(() => {
+                energySection.classList.add('energy-shake');
+                setTimeout(() => {
+                    energySection.classList.remove('energy-shake');
+                }, 500);
+            }, 4000);
+        }
+
+        async function updatePeriodAndTimer() {
+            const now = new Date();
+            const currentTime = now.getTime();
+            if (currentTime - lastTimerUpdate < 1000) return;
+            lastTimerUpdate = currentTime;
+
+            const year = now.getUTCFullYear();
+            const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(now.getUTCDate()).padStart(2, '0');
+            const totalMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+            const periodNumber = `${year}${month}${day}1000${10001 + totalMinutes}`;
+            const remainingSeconds = 60 - now.getUTCSeconds();
+
+            if (lastPeriodNumber !== periodNumber) {
+                showAnalysing();
+                if (pendingResult && lastPeriodNumber) {
+                    await checkPendingResult(lastPeriodNumber).catch(err => console.error('Error checking pending:', err));
+                }
+                lastPeriodNumber = periodNumber;
+                periodNumberElement.textContent = periodNumber || 'N/A';
+                await generatePrediction(periodNumber);
+            }
+
+            timerElement.textContent = `00:${String(remainingSeconds).padStart(2, '0')}`;
+            updateRealTimeStats();
+        }
+        setInterval(updatePeriodAndTimer, 1000);
+
+        async function fetchLastResultsFromAPI() {
+            try {
+                const response = await fetch('https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json');
+                const data = await response.json();
+                return data?.data?.list?.slice(0, 10) || [];
+            } catch (e) {
+                console.error('API fetch error:', e);
+                return [];
+            }
+        }
+        
+        function getNumbers(color, size) {
+            const colorNumbers = color === 'red' ? RED_NUMBERS : GREEN_NUMBERS;
+            const sizeNumbers = size === 'BIG' ? bigNumbers : smallNumbers;
+            
+            const filtered = colorNumbers.filter(num => sizeNumbers.includes(num));
+            
+            if (filtered.length < 2) {
+                return [colorNumbers[0], colorNumbers[1] || colorNumbers[0]];
+            }
+            
+            const firstNum = filtered[Math.floor(Math.random() * filtered.length)];
+            let secondNum;
+            do {
+                secondNum = filtered[Math.floor(Math.random() * filtered.length)];
+            } while (secondNum === firstNum && filtered.length > 1);
+            
+            return [firstNum, secondNum].sort((a,b) => a-b);
+        }
+
+        function checkNumberWin(predictedNumbers, actualNumber) {
+            return predictedNumbers.includes(actualNumber);
+        }
+
+
+        async function generatePrediction(period) {
+            const existingEntry = history.find(entry => entry.period === period);
+            if (existingEntry && existingEntry.status !== 'Pending') {
+                return;
+            }
+
+            currentPredictionElement.textContent = 'Processing...';
+            let predictionCategory = 'Waiting...';
+            let predictedNumbers = ['N/A', 'N/A'];
+
+            try {
+                const recent = await fetchLastResultsFromAPI();
+                if (recent.length >= 2) {
+                    const num1 = parseInt(recent[0].number, 10);
+                    const num2 = parseInt(recent[1].number, 10);
+                    const product = num1 * num2;
+                    let lastDigit = product % 10;
+                    
+                    let predictionColor = numberColors[lastDigit];
+                    let predictionSize;
+
+                    if (num1 === 0 || num2 === 0) {
+                        const nonZeroNum = num1 === 0 ? num2 : num1;
+                        predictionSize = bigNumbers.includes(nonZeroNum) ? 'BIG' : 'SMALL';
+                        predictionColor = numberColors[nonZeroNum];
+                    } else {
+                        predictionSize = lastDigit > 4 ? 'SMALL' : 'BIG';
+                    }
+
+                    predictedNumbers = getNumbers(predictionColor, predictionSize);
+                    predictionCategory = predictionSize;
+                }
+
+                currentPredictionElement.innerHTML = `${predictionCategory} | (${predictedNumbers.join(', ')})`;
+
+                if (existingEntry) {
+                    existingEntry.category = predictionCategory;
+                    existingEntry.numbers = predictedNumbers;
+                } else if (predictionCategory !== 'Waiting...') {
+                    history.unshift({
+                        period,
+                        category: predictionCategory,
+                        numbers: predictedNumbers,
+                        status: 'Pending',
+                        isNumberWin: false
+                    });
+                    if (history.length > 100) {
+                        history.pop();
+                    }
+                }
+                pendingResult = history[0];
+                renderHistory();
+            } catch (error) {
+                console.error("Error in generatePrediction:", error);
+                currentPredictionElement.textContent = 'Prediction Error';
+            }
+        }
+
+        async function checkPendingResult(period) {
+            if (!pendingResult || pendingResult.period !== period) return;
+            const apiResultData = await fetchLastResultsFromAPI();
+            if (!apiResultData.length) return;
+            const latest = apiResultData[0];
+
+            if (latest && latest.issueNumber === period) {
+                const actualNumber = parseInt(latest.number, 10);
+                const actualCategory = bigNumbers.includes(actualNumber) ? 'BIG' : 'SMALL';
+                
+                const isWin = pendingResult.category === actualCategory;
+                const isNumberWin = checkNumberWin(pendingResult.numbers, actualNumber);
+
+                pendingResult.status = isWin ? 'WIN' : 'LOSS';
+                pendingResult.apiCategory = actualCategory;
+                pendingResult.apiNumber = actualNumber;
+                pendingResult.isNumberWin = isNumberWin;
+
+                if (isWin) {
+                    winStreak++;
+                    totalWins++;
+                    showWinAnimation();
+                    if (confetti) {
+                        document.getElementById('confetti-canvas').style.display = 'block';
+                        confetti.addConfetti({
+                            confettiRadius: 6,
+                            confettiNumber: 500,
+                            confettiColors: [
+                                '#FFD700', '#FF6347', '#5D5DFF', '#32CD32'
+                            ]
+                        }).then(() => {
+                            setTimeout(() => {
+                                document.getElementById('confetti-canvas').style.display = 'none';
+                            }, 500);
+                        });
+                    }
+                    if (isNumberWin) {
+                        showNotification('win', 'WIN + JK!');
+                    } else {
+                        showNotification('win', `WIN! Win Streak: ${winStreak}`);
+                    }
+                } else {
+                    winStreak = 0;
+                    totalLosses++;
+                    showLossAnimation();
+                    showNotification('loss', `LOSS! Win Streak: ${winStreak}`);
+                }
+                renderHistory();
+                pendingResult = null;
+            }
+        }
+
+        function renderHistory() {
+            if (!historyBody) return;
+            const renderedHistory = history.map(h => {
+                const statusClass = h.status === 'Pending' ? 'pending' : (h.status === 'WIN' ? 'win' : 'loss');
+                const statusIcon = h.status === 'Pending' ? `<span class="pending-spinner"></span>` :
+                    h.status === 'WIN' ? `<span class="win-trophy"></span>` :
+                    `<span class="loss-signal"></span>`;
+                const winBadge = h.status === 'WIN' ? `<div class="win-badge ${h.isNumberWin ? 'win-jk-badge' : ''}">${h.isNumberWin ? 'WIN + JK' : 'WIN'}</div>` : '';
+                return `
+                    <div class="history-card ${statusClass}">
+                        ${winBadge}
+                        <div class="history-content">
+                            <span><i class="fas fa-calendar-alt"></i> PERIOD: <span class="value">${h.period || 'N/A'}</span></span>
+                            <span><i class="fas fa-bullseye"></i> PREDICTION: <span class="value">${h.category} | (${h.numbers.join(', ')})</span></span>
+                            <span><i class="fas fa-check-circle"></i> RESULT: <span class="value">${h.status === 'Pending' ? 'Pending' : `${h.apiCategory} | No: ${h.apiNumber}`}</span> ${statusIcon}</span>
+                        </div>
+                    </div>`;
+            }).join("");
+            historyBody.innerHTML = renderedHistory;
+            historyBody.scrollTop = historyBody.scrollHeight;
+        }
+
+        function updateRealTimeStats() {
+            let totalBets = totalWins + totalLosses;
+            let currentWinRate = totalBets > 0 ? ((totalWins / totalBets) * 100).toFixed(2) : 0;
+            document.getElementById('totalPredictions').textContent = totalBets;
+            document.getElementById('totalWins').textContent = totalWins;
+            document.getElementById('totalLosses').textContent = totalLosses;
+            document.getElementById('winRate').textContent = `${currentWinRate}%`;
+
+            const winStreakBadge = document.getElementById('win-streak-badge');
+            if (winStreak > 0) {
+                winStreakBadge.textContent = `Win Streak: ${winStreak}`;
+                winStreakBadge.classList.remove('hidden');
+            } else {
+                winStreakBadge.classList.add('hidden');
+            }
+        }
+
+        function clearHistory() {
+            history = [];
+            winStreak = 0;
+            totalWins = 0;
+            totalLosses = 0;
+            renderHistory();
+            updateRealTimeStats();
+        }
+
+        function showNotification(type, message) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function showWinAnimation() {
+            predictionCard.classList.add('win-glow');
+            setTimeout(() => {
+                predictionCard.classList.remove('win-glow');
+            }, 2000);
+        }
+
+        function showLossAnimation() {
+            const body = document.body;
+            body.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                body.style.animation = '';
+            }, 500);
+        }
+    </script>
+</body>
+</html>
