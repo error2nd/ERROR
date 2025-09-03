@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>✪ 𝗘𝗔𝗚𝗟𝗘 𝗠𝗔𝗙𝗜𝗔 ✪</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
@@ -55,7 +55,7 @@
         }
         
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'El Messiri', sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh;
@@ -181,12 +181,8 @@
             width: 90%;
             max-width: 400px;
             border: 2px solid var(--border-light);
-            text-align: center;
         }
-        .modal h3 {
-            color: var(--primary-color);
-            font-size: 1.5em;
-        }
+
         .modal.active { display: block; }
 
         /* Cards */
@@ -1032,82 +1028,10 @@
             50% { box-shadow: 0 0 20px var(--shadow-color); }
         }
 
-        /* Small Time Pop-up */
-        .time-notification {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #ffffff;
-            padding: 0.5rem 1rem;
-            font-size: 0.9em;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1002;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        .time-notification.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-
         /* Features List */
         .features-list {
             list-style-type: none;
             padding: 0;
-        }
-        
-        .switch {
-          position: relative;
-          display: inline-block;
-          width: 50px;
-          height: 28px;
-        }
-        .switch input {
-          opacity: 0;
-          width: 0;
-          height: 0;
-        }
-        .slider {
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: #ccc;
-          transition: .4s;
-          border-radius: 28px;
-        }
-        .slider:before {
-          position: absolute;
-          content: "";
-          height: 20px;
-          width: 20px;
-          left: 4px;
-          bottom: 4px;
-          background-color: white;
-          transition: .4s;
-          border-radius: 50%;
-        }
-        input:checked + .slider {
-          background-color: var(--primary-color);
-        }
-        input:checked + .slider:before {
-          transform: translateX(22px);
-        }
-        .features-list li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .feature-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
         }
 
         .features-list li {
@@ -1249,7 +1173,6 @@
 <body>
     <canvas id="confetti-canvas" style="display: none;"></canvas>
     <div id="animated-bg" class="animated-background"></div>
-    <div id="time-notification" class="time-notification hidden"></div>
 
     <div id="maintenance-overlay" class="maintenance-overlay hidden">
         <span><i class="fas fa-tools"></i></span>
@@ -1301,16 +1224,6 @@
             <button id="closeErrorModal" class="text-xl">&times;</button>
         </div>
         <p id="errorModalMessage"></p>
-    </div>
-
-    <div id="breakModal" class="modal">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-green-500">MESSAGE FROM ADMIN</h3>
-            <button id="closeBreakModal" class="text-xl">&times;</button>
-        </div>
-        <p>CONGRATULATIONS ON YOUR WINNING STREAK!</p>
-        <p>IT'S IMPORTANT TO TAKE A BREAK. YOUR NEXT PREDICTION WILL BE AVAILABLE IN APPROXIMATELY 10-20 MINUTES.</p>
-        <div id="breakTimer"></div>
     </div>
 
     <div id="main-page" class="hidden">
@@ -1385,48 +1298,15 @@
                 <div id="features" class="content-section">
                     <div class="features-content">
                         <div class="card p-6">
-                            <h2 class="text-2xl font-bold mb-4"><i class="fas fa-cogs"></i> FEATURES</h2>
+                            <h2 class="text-2xl font-bold mb-4"><i class="fas fa-cogs"></i> WORKING FEATURES</h2>
                             <ul class="features-list">
-                                <li id="autoPredictionFeature">
-                                    <div class="feature-info">
-                                        <i class="fas fa-robot"></i>
-                                        <span class="feature-text">AUTO-PREDICTION</span>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" id="autoPredictionToggle">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </li>
-                                <li id="winStreakFeature">
-                                    <div class="feature-info">
-                                        <i class="fas fa-award"></i>
-                                        <span class="feature-text">WIN STREAK TRACKER</span>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" id="winStreakToggle" checked>
-                                        <span class="slider round"></span>
-                                    </label>
-                                </li>
-                                <li id="soundNotificationsFeature">
-                                    <div class="feature-info">
-                                        <i class="fas fa-volume-up"></i>
-                                        <span class="feature-text">SOUND NOTIFICATIONS</span>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" id="soundNotificationsToggle" checked>
-                                        <span class="slider round"></span>
-                                    </label>
-                                </li>
-                                <li id="autoCleanHistoryFeature">
-                                    <div class="feature-info">
-                                        <i class="fas fa-trash-restore"></i>
-                                        <span class="feature-text">AUTO-CLEAN PENDING HISTORY</span>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" id="autoCleanHistoryToggle">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </li>
+                                <li><i class="fas fa-brain"></i><span class="feature-text">AI-POWERED PREDICTIONS</span></li>
+                                <li><i class="fas fa-chart-area"></i><span class="feature-text">REAL-TIME DATA ANALYSIS</span></li>
+                                <li><i class="fas fa-trophy"></i><span class="feature-text">WIN/LOSS STREAK TRACKING</span></li>
+                                <li><i class="fas fa-history"></i><span class="feature-text">DETAILED PREDICTION HISTORY</span></li>
+                                <li><i class="fas fa-lock"></i><span class="feature-text">SECURE LOGIN & AUTHENTICATION</span></li>
+                                <li><i class="fas fa-star-of-life"></i><span class="feature-text">ANTI-BAN TECHNOLOGY</span></li>
+                                <li><i class="fas fa-bolt"></i><span class="feature-text">INSTANT PREDICTIONS</span></li>
                             </ul>
                         </div>
                     </div>
@@ -1514,7 +1394,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
     <script>
-        // --- Navigation Logic ---
+        // Navigation Logic
         const navItems = document.querySelectorAll('.navigation ul li');
         const indicator = document.querySelector('.indicator');
         navItems.forEach((item, index) => {
@@ -1532,7 +1412,7 @@
             indicator.style.width = `${firstItemWidth}px`;
         }
 
-        // --- Theme Switching Logic ---
+        // Theme Switching Logic
         const themesContainer = document.querySelector('.themes-grid');
         const root = document.documentElement;
         const animatedBg = document.getElementById('animated-bg');
@@ -1597,7 +1477,7 @@
             applyTheme(savedTheme);
         });
 
-        // --- Modal & UI Logic ---
+        // Error Modal Logic
         const errorModal = document.getElementById('errorModal');
         document.getElementById('closeErrorModal').addEventListener('click', () => errorModal.classList.remove('active'));
 
@@ -1606,12 +1486,6 @@
             errorModal.classList.add('active');
         }
 
-        const breakModal = document.getElementById('breakModal');
-        const closeBreakModalBtn = document.getElementById('closeBreakModal');
-        closeBreakModalBtn.addEventListener('click', () => {
-            breakModal.classList.remove('active');
-        });
-
         // Initialize Confetti
         document.addEventListener('DOMContentLoaded', () => {
             const canvas = document.getElementById('confetti-canvas');
@@ -1619,32 +1493,8 @@
             showPage('home');
             startEnergyShake();
             updatePeriodAndTimer();
-            // Start the time pop-up logic
-            setInterval(updateTimePopup, 10000);
-            updateTimePopup();
-            loadFeatureStates();
-            setupFeatureToggles();
         });
 
-        // --- TIME POPUP LOGIC ---
-        function updateTimePopup() {
-            const now = new Date();
-            const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-            const timeNotification = document.getElementById('time-notification');
-            
-            timeNotification.textContent = time;
-            timeNotification.classList.remove('hidden');
-            timeNotification.classList.add('visible');
-            
-            setTimeout(() => {
-                timeNotification.classList.remove('visible');
-            }, 3000);
-        }
-        // --- END TIME POPUP LOGIC ---
-
-
-        // --- Firebase & Auth Logic ---
         const firebaseConfig = {
             apiKey: "AIzaSyBG1ZPt3VMGIKuGflHdRecSZHx5puY99Xs",
             authDomain: "error-57ad4.firebaseapp.com",
@@ -1662,8 +1512,6 @@
 
         let logoutTimerId = null;
         let confetti = null;
-        let isBreakActive = false;
-        let breakTimer = null;
 
         function getDeviceId() {
             let deviceId = localStorage.getItem('deviceId');
@@ -1764,7 +1612,6 @@
             database.ref(KEYS_DB_PATH + '/' + key + '/loginHistory').push({ timestamp: timestamp, deviceId: deviceId });
         }
 
-        // Initial check for server status and saved login key
         database.ref(SERVER_STATUS_PATH).on('value', (snap) => {
             if (snap.exists() && snap.val() === 'off') {
                 showMaintenance();
@@ -1825,7 +1672,6 @@
             });
         });
 
-        // --- Prediction & Game Logic ---
         const periodNumberElement = document.getElementById('periodNumber');
         const currentPredictionElement = document.getElementById('currentPrediction');
         const historyBody = document.getElementById('historyBody');
@@ -1838,8 +1684,6 @@
         const energySection = document.getElementById('energy-section');
         const confidenceFill = document.getElementById('confidenceFill');
         const confidenceText = document.getElementById('confidenceText');
-        const winSound = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-        const lossSound = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3');
 
         const numberColors = {
             0: 'red', 2: 'red', 4: 'red', 6: 'red', 8: 'red',
@@ -1909,14 +1753,6 @@
             const periodNumber = `${year}${month}${day}1000${10001 + totalMinutes}`;
             const remainingSeconds = 60 - now.getUTCSeconds();
 
-            if (isBreakActive) {
-                currentPredictionElement.textContent = 'BREAK TIME';
-                periodNumberElement.textContent = 'WAITING...';
-                confidenceFill.style.strokeDashoffset = 314;
-                confidenceText.textContent = '0%';
-                return;
-            }
-
             if (lastPeriodNumber !== periodNumber) {
                 showAnalysing();
                 if (pendingResult && lastPeriodNumber) {
@@ -1924,7 +1760,7 @@
                 }
                 lastPeriodNumber = periodNumber;
                 periodNumberElement.textContent = periodNumber || 'N/A';
-                generatePrediction(periodNumber);
+                await generatePrediction(periodNumber);
             }
 
             updateRealTimeStats();
@@ -1973,13 +1809,8 @@
         }
 
         async function generatePrediction(period) {
-            const existingEntryIndex = history.findIndex(entry => entry.period === period);
-            const autoCleanEnabled = localStorage.getItem('autoCleanHistoryEnabled') === 'true';
-
-            // If a prediction already exists for this period, and it's not pending, do nothing
-            if (existingEntryIndex !== -1 && history[existingEntryIndex].status !== 'PENDING') {
-                return;
-            }
+            const existingEntry = history.find(entry => entry.period === period);
+            if (existingEntry && existingEntry.status !== 'PENDING') return;
 
             currentPredictionElement.textContent = 'PROCESSING...';
             let predictionCategory = 'WAITING...';
@@ -2019,12 +1850,10 @@
                 confidenceFill.style.strokeDashoffset = 314 - (314 * confidence / 100);
                 confidenceText.textContent = `${confidence}%`;
 
-                // Auto-clean logic: remove old pending prediction for the same period
-                if (autoCleanEnabled && existingEntryIndex !== -1 && history[existingEntryIndex].status === 'PENDING') {
-                    history.splice(existingEntryIndex, 1);
-                }
-                
-                if (predictionCategory !== 'WAITING...') {
+                if (existingEntry) {
+                    existingEntry.category = predictionCategory;
+                    existingEntry.numbers = predictedNumbers;
+                } else if (predictionCategory !== 'WAITING...') {
                     history.unshift({
                         period,
                         category: predictionCategory,
@@ -2034,8 +1863,7 @@
                     });
                     if (history.length > 100) history.pop();
                 }
-
-                pendingResult = history.find(entry => entry.period === period);
+                pendingResult = history[0];
                 renderHistory();
             } catch (error) {
                 console.error("ERROR IN GENERATEPREDICTION:", error);
@@ -2066,7 +1894,6 @@
                     winStreak++;
                     totalWins++;
                     lossStreak = 0;
-                    if (localStorage.getItem('soundNotificationsEnabled') === 'true') winSound.play();
                     showWinAnimation();
                     if (confetti) {
                         document.getElementById('confetti-canvas').style.display = 'block';
@@ -2085,14 +1912,10 @@
                     } else {
                         showNotification('win', `WIN! WIN STREAK: ${winStreak}`);
                     }
-                    if (winStreak >= 10) {
-                        startBreak();
-                    }
                 } else {
                     winStreak = 0;
                     totalLosses++;
                     lossStreak++;
-                    if (localStorage.getItem('soundNotificationsEnabled') === 'true') lossSound.play();
                     showLossAnimation();
                     showNotification('loss', `LOSS! WIN STREAK: ${winStreak}`);
                 }
@@ -2142,7 +1965,7 @@
             document.getElementById('winRate').textContent = `${currentWinRate}%`;
 
             const winStreakBadge = document.getElementById('win-streak-badge');
-            if (localStorage.getItem('winStreakEnabled') === 'true' && winStreak > 0) {
+            if (winStreak > 0) {
                 winStreakBadge.textContent = `WIN STREAK: ${winStreak}`;
                 winStreakBadge.classList.remove('hidden');
             } else {
@@ -2181,71 +2004,6 @@
             setTimeout(() => {
                 body.style.animation = '';
             }, 500);
-        }
-
-        function startBreak() {
-            isBreakActive = true;
-            winStreak = 0; // Reset win streak
-            updateRealTimeStats();
-            breakModal.classList.add('active');
-
-            const breakDuration = Math.random() * (1200 - 600) + 600; // 10 to 20 minutes in seconds
-            const endTime = Date.now() + breakDuration * 1000;
-
-            const breakTimerElement = document.getElementById('breakTimer');
-            breakTimer = setInterval(() => {
-                const remaining = Math.max(0, endTime - Date.now());
-                if (remaining <= 0) {
-                    clearInterval(breakTimer);
-                    isBreakActive = false;
-                    breakModal.classList.remove('active');
-                    showNotification('win', 'BREAK COMPLETE. YOU CAN RESUME TRADING.');
-                } else {
-                    const minutes = Math.floor(remaining / 60000);
-                    const seconds = Math.floor((remaining % 60000) / 1000);
-                    breakTimerElement.textContent = `TIME REMAINING: ${minutes}m ${seconds}s`;
-                }
-            }, 1000);
-        }
-
-        function loadFeatureStates() {
-            const features = ['autoPrediction', 'winStreak', 'soundNotifications', 'autoCleanHistory'];
-            features.forEach(feature => {
-                const toggle = document.getElementById(`${feature}Toggle`);
-                if (toggle) {
-                    const state = localStorage.getItem(`${feature}Enabled`);
-                    if (state === null) {
-                        localStorage.setItem(`${feature}Enabled`, toggle.checked);
-                    } else {
-                        toggle.checked = state === 'true';
-                    }
-                }
-            });
-        }
-
-        function setupFeatureToggles() {
-            const features = [
-                { id: 'autoPrediction', message: 'AUTO-PREDICTION' },
-                { id: 'winStreak', message: 'WIN STREAK TRACKER' },
-                { id: 'soundNotifications', message: 'SOUND NOTIFICATIONS' },
-                { id: 'autoCleanHistory', message: 'AUTO-CLEAN PENDING HISTORY' }
-            ];
-
-            features.forEach(feature => {
-                const toggle = document.getElementById(`${feature.id}Toggle`);
-                if (toggle) {
-                    toggle.addEventListener('change', (event) => {
-                        const isEnabled = event.target.checked;
-                        localStorage.setItem(`${feature.id}Enabled`, isEnabled);
-                        const status = isEnabled ? 'ENABLED' : 'DISABLED';
-                        const notificationType = isEnabled ? 'color-mode' : 'loss';
-                        showNotification(notificationType, `${feature.message} ${status}`);
-                        if (feature.id === 'winStreak') {
-                             updateRealTimeStats();
-                        }
-                    });
-                }
-            });
         }
     </script>
 </body>
