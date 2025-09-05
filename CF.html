@@ -29,31 +29,78 @@
         }
 
         /* --- UPDATED THEMES --- */
+        /* A more harmonious green & teal */
         [data-theme="theme1"] {
-            --primary-color: #4CAF50;
-            --secondary-accent: #8BC34A;
-            --border-light: #C8E6C9;
-            --shadow-color: rgba(76, 175, 80, 0.3);
+            --primary-color: #00A896;
+            --secondary-accent: #43A047;
+            --border-light: #90C6B8;
+            --shadow-color: rgba(0, 168, 150, 0.3);
         }
+        /* A professional blue & light blue */
         [data-theme="theme2"] {
             --primary-color: #1A73E8;
             --secondary-accent: #669DF6;
             --border-light: #B3CDE8;
             --shadow-color: rgba(26, 115, 232, 0.3);
         }
+        /* A vibrant purple & soft pink */
         [data-theme="theme3"] {
             --primary-color: #673AB7;
             --secondary-accent: #F06292;
             --border-light: #C2A0E4;
             --shadow-color: rgba(103, 58, 183, 0.3);
         }
+        /* A warm and energetic red-orange palette */
         [data-theme="theme4"] {
+            --primary-color: #FF5722;
+            --secondary-accent: #FF9800;
+            --border-light: #FFB59F;
+            --shadow-color: rgba(255, 87, 34, 0.3);
+        }
+        /* A sophisticated maroon & peach */
+        [data-theme="theme5"] {
+            --primary-color: #C2185B;
+            --secondary-accent: #FFAB40;
+            --border-light: #E1809E;
+            --shadow-color: rgba(194, 24, 91, 0.3);
+        }
+        /* A cool and clean blue-green combo */
+        [data-theme="theme6"] {
+            --primary-color: #00BCD4;
+            --secondary-accent: #00E676;
+            --border-light: #9FE9F3;
+            --shadow-color: rgba(0, 188, 212, 0.3);
+        }
+        /* A deep, elegant purple and gold */
+        [data-theme="theme7"] {
+            --primary-color: #512DA8;
+            --secondary-accent: #FFC107;
+            --border-light: #A592C9;
+            --shadow-color: rgba(81, 45, 168, 0.3);
+        }
+        /* A monochromatic and clean green palette */
+        [data-theme="theme8"] {
+            --primary-color: #4CAF50;
+            --secondary-accent: #8BC34A;
+            --border-light: #C8E6C9;
+            --shadow-color: rgba(76, 175, 80, 0.3);
+        }
+        /* A soft, calming pink and rose gold */
+        [data-theme="theme9"] {
+            --primary-color: #E91E63;
+            --secondary-accent: #FFB74D;
+            --border-light: #F8BBD0;
+            --shadow-color: rgba(233, 30, 99, 0.3);
+        }
+        /* A sleek, modern gray and black */
+        [data-theme="theme10"] {
             --primary-color: #424242;
             --secondary-accent: #757575;
             --border-light: #BDBDBD;
             --shadow-color: rgba(66, 66, 66, 0.3);
         }
-        
+        /* --- END UPDATED THEMES --- */
+
         body {
             font-family: 'El Messiri', sans-serif;
             margin: 0;
@@ -72,7 +119,7 @@
             color: var(--highlight-color);
         }
 
-        /* Background Animation */
+        /* Background Animation (Cosmic Wave Only) */
         .cosmic-wave {
             position: fixed;
             top: 0;
@@ -92,75 +139,10 @@
             z-index: -1;
         }
 
-        .animated-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .animated-background.theme1 {
-            background: linear-gradient(
-                135deg,
-                rgba(76, 175, 80, 0.3),
-                rgba(139, 195, 74, 0.3),
-                rgba(248, 249, 250, 0.3)
-            );
-            background-size: 400%;
-            animation: theme1-anim 15s ease-in-out infinite;
-        }
-
-        .animated-background.theme2 {
-            background: linear-gradient(
-                45deg,
-                rgba(26, 115, 232, 0.2),
-                rgba(102, 157, 246, 0.2),
-                rgba(248, 249, 250, 0.2)
-            );
-            background-size: 400%;
-            animation: theme2-anim 20s linear infinite;
-        }
-
-        .animated-background.theme3 {
-            background: radial-gradient(
-                circle,
-                rgba(103, 58, 183, 0.3),
-                rgba(240, 98, 146, 0.3),
-                rgba(248, 249, 250, 0.3)
-            );
-            background-size: 400%;
-            animation: theme3-anim 25s ease infinite alternate;
-        }
-
-        .animated-background.theme4 {
-            background: linear-gradient(
-                135deg,
-                rgba(66, 66, 66, 0.4),
-                rgba(117, 117, 117, 0.4),
-                rgba(248, 249, 250, 0.4)
-            );
-            background-size: 400%;
-            animation: theme4-anim 30s linear infinite;
-        }
-
-        @keyframes theme1-anim {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes theme2-anim {
+        @keyframes waveFlow {
             0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
-        }
-        @keyframes theme3-anim {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
-        }
-        @keyframes theme4-anim {
-            0% { background-position: 100% 0%; }
-            100% { background-position: 0% 100%; }
+            50% { background-position: 400% 400%; }
+            100% { background-position: 0% 0%; }
         }
 
         .hidden { display: none !important; }
@@ -1172,7 +1154,7 @@
 </head>
 <body>
     <canvas id="confetti-canvas" style="display: none;"></canvas>
-    <div id="animated-bg" class="animated-background"></div>
+    <div class="cosmic-wave"></div>
 
     <div id="maintenance-overlay" class="maintenance-overlay hidden">
         <span><i class="fas fa-tools"></i></span>
@@ -1305,8 +1287,6 @@
                                 <li><i class="fas fa-trophy"></i><span class="feature-text">WIN/LOSS STREAK TRACKING</span></li>
                                 <li><i class="fas fa-history"></i><span class="feature-text">DETAILED PREDICTION HISTORY</span></li>
                                 <li><i class="fas fa-lock"></i><span class="feature-text">SECURE LOGIN & AUTHENTICATION</span></li>
-                                <li><i class="fas fa-star-of-life"></i><span class="feature-text">ANTI-BAN TECHNOLOGY</span></li>
-                                <li><i class="fas fa-bolt"></i><span class="feature-text">INSTANT PREDICTIONS</span></li>
                             </ul>
                         </div>
                     </div>
@@ -1332,8 +1312,8 @@
                             <h2 class="text-2xl font-bold text-center mb-4"><i class="fas fa-palette"></i> CHOOSE YOUR THEME</h2>
                             <div class="themes-grid">
                                 <div class="theme-card" data-theme="theme1">
-                                    <div class="theme-swatch" style="background: linear-gradient(135deg, #4CAF50, #8BC34A);"></div>
-                                    <span class="theme-title">MINTY FRESH</span>
+                                    <div class="theme-swatch" style="background: linear-gradient(135deg, #00A896, #43A047);"></div>
+                                    <span class="theme-title">AQUA GLOW</span>
                                 </div>
                                 <div class="theme-card" data-theme="theme2">
                                     <div class="theme-swatch" style="background: linear-gradient(135deg, #1A73E8, #669DF6);"></div>
@@ -1344,6 +1324,30 @@
                                     <span class="theme-title">PURPLE HAZE</span>
                                 </div>
                                 <div class="theme-card" data-theme="theme4">
+                                    <div class="theme-swatch" style="background: linear-gradient(135deg, #FF5722, #FF9800);"></div>
+                                    <span class="theme-title">SUNRISE</span>
+                                </div>
+                                <div class="theme-card" data-theme="theme5">
+                                    <div class="theme-swatch" style="background: linear-gradient(135deg, #C2185B, #FFAB40);"></div>
+                                    <span class="theme-title">RASPBERRY</span>
+                                </div>
+                                <div class="theme-card" data-theme="theme6">
+                                    <div class="theme-swatch" style="background: linear-gradient(135deg, #00BCD4, #00E676);"></div>
+                                    <span class="theme-title">BLUE WAVE</span>
+                                </div>
+                                <div class="theme-card" data-theme="theme7">
+                                    <div class="theme-swatch" style="background: linear-gradient(135deg, #512DA8, #FFC107);"></div>
+                                    <span class="theme-title">DEEP SPACE</span>
+                                </div>
+                                <div class="theme-card" data-theme="theme8">
+                                    <div class="theme-swatch" style="background: linear-gradient(135deg, #4CAF50, #8BC34A);"></div>
+                                    <span class="theme-title">MINTY FRESH</span>
+                                </div>
+                                <div class="theme-card" data-theme="theme9">
+                                    <div class="theme-swatch" style="background: linear-gradient(135deg, #E91E63, #FFB74D);"></div>
+                                    <span class="theme-title">PINK PEACH</span>
+                                </div>
+                                <div class="theme-card" data-theme="theme10">
                                     <div class="theme-swatch" style="background: linear-gradient(135deg, #424242, #757575);"></div>
                                     <span class="theme-title">STEEL</span>
                                 </div>
@@ -1415,14 +1419,13 @@
         // Theme Switching Logic
         const themesContainer = document.querySelector('.themes-grid');
         const root = document.documentElement;
-        const animatedBg = document.getElementById('animated-bg');
 
         const themes = {
             theme1: {
-                primary: '#4CAF50',
-                secondary: '#8BC34A',
-                border: '#C8E6C9',
-                shadow: 'rgba(76, 175, 80, 0.3)'
+                primary: '#00A896',
+                secondary: '#43A047',
+                border: '#90C6B8',
+                shadow: 'rgba(0, 168, 150, 0.3)'
             },
             theme2: {
                 primary: '#1A73E8',
@@ -1437,11 +1440,47 @@
                 shadow: 'rgba(103, 58, 183, 0.3)'
             },
             theme4: {
+                primary: '#FF5722',
+                secondary: '#FF9800',
+                border: '#FFB59F',
+                shadow: 'rgba(255, 87, 34, 0.3)'
+            },
+            theme5: {
+                primary: '#C2185B',
+                secondary: '#FFAB40',
+                border: '#E1809E',
+                shadow: 'rgba(194, 24, 91, 0.3)'
+            },
+            theme6: {
+                primary: '#00BCD4',
+                secondary: '#00E676',
+                border: '#9FE9F3',
+                shadow: 'rgba(0, 188, 212, 0.3)'
+            },
+            theme7: {
+                primary: '#512DA8',
+                secondary: '#FFC107',
+                border: '#A592C9',
+                shadow: 'rgba(81, 45, 168, 0.3)'
+            },
+            theme8: {
+                primary: '#4CAF50',
+                secondary: '#8BC34A',
+                border: '#C8E6C9',
+                shadow: 'rgba(76, 175, 80, 0.3)'
+            },
+            theme9: {
+                primary: '#E91E63',
+                secondary: '#FFB74D',
+                border: '#F8BBD0',
+                shadow: 'rgba(233, 30, 99, 0.3)'
+            },
+            theme10: {
                 primary: '#424242',
                 secondary: '#757575',
                 border: '#BDBDBD',
                 shadow: 'rgba(66, 66, 66, 0.3)'
-            }
+            },
         };
 
         function applyTheme(themeName) {
@@ -1453,9 +1492,6 @@
                 root.style.setProperty('--shadow-color', selectedTheme.shadow);
                 root.setAttribute('data-theme', themeName);
                 localStorage.setItem('selectedTheme', themeName);
-
-                animatedBg.className = 'animated-background';
-                animatedBg.classList.add(themeName);
 
                 document.querySelectorAll('.theme-card').forEach(card => card.classList.remove('active'));
                 document.querySelector(`[data-theme="${themeName}"]`).classList.add('active');
@@ -1782,17 +1818,14 @@
             }
         }
 
-        function getOppositeNumbers(color, size) {
-            const oppositeColor = color === 'red' ? 'green' : 'red';
-            const oppositeSize = size === 'BIG' ? 'SMALL' : 'BIG';
-            
-            const oppositeColorNumbers = oppositeColor === 'red' ? RED_NUMBERS : GREEN_NUMBERS;
-            const oppositeSizeNumbers = oppositeSize === 'BIG' ? bigNumbers : smallNumbers;
+        function getNumbers(color, size) {
+            const colorNumbers = color === 'red' ? RED_NUMBERS : GREEN_NUMBERS;
+            const sizeNumbers = size === 'BIG' ? bigNumbers : smallNumbers;
 
-            const filtered = oppositeColorNumbers.filter(num => oppositeSizeNumbers.includes(num));
+            const filtered = colorNumbers.filter(num => sizeNumbers.includes(num));
 
             if (filtered.length < 2) {
-                return [oppositeColorNumbers[0], oppositeColorNumbers[1] || oppositeColorNumbers[0]];
+                return [colorNumbers[0], colorNumbers[1] || colorNumbers[0]];
             }
 
             const firstNum = filtered[Math.floor(Math.random() * filtered.length)];
@@ -1827,17 +1860,17 @@
                     const sum = previousPeriodNumber + previousResultNumber;
                     const finalDigit = sum % 10;
                     
-                    let logicSize;
+                    let predictionSize;
                     if (finalDigit > 4) {
-                        logicSize = 'BIG';
+                        predictionSize = 'BIG';
                     } else {
-                        logicSize = 'SMALL';
+                        predictionSize = 'SMALL';
                     }
-                    const logicColor = numberColors[finalDigit];
 
-                    // Opposite Logic
-                    predictionCategory = logicSize === 'BIG' ? 'SMALL' : 'BIG';
-                    predictedNumbers = getOppositeNumbers(logicColor, logicSize);
+                    const predictionColor = numberColors[finalDigit];
+
+                    predictedNumbers = getNumbers(predictionColor, predictionSize);
+                    predictionCategory = predictionSize;
                     confidence = Math.floor(Math.random() * 10) + 90;
 
                 } else {
