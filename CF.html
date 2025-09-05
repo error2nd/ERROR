@@ -994,7 +994,7 @@
 
         .notification.win { background-color: var(--win-color); }
         .notification.loss { background-color: var(--loss-color); }
-        .notification.opposite-mode { background-color: #FFC107; }
+        .notification.color-mode { background-color: var(--primary-color); }
 
         @keyframes fadeInOut {
             0% { opacity: 0; transform: translate(-50%, -20px); }
@@ -1394,6 +1394,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
     <script>
+        // Navigation Logic
         const navItems = document.querySelectorAll('.navigation ul li');
         const indicator = document.querySelector('.indicator');
         navItems.forEach((item, index) => {
@@ -1411,6 +1412,7 @@
             indicator.style.width = `${firstItemWidth}px`;
         }
 
+        // Theme Switching Logic
         const themesContainer = document.querySelector('.themes-grid');
         const root = document.documentElement;
         const animatedBg = document.getElementById('animated-bg');
@@ -1465,15 +1467,17 @@
             if (themeCard) {
                 const themeName = themeCard.dataset.theme;
                 applyTheme(themeName);
-                showNotification('opposite-mode', 'THEME CHANGED SUCCESSFULLY');
+                showNotification('color-mode', 'THEME CHANGED SUCCESSFULLY');
             }
         });
 
+        // Load saved theme on page load
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('selectedTheme') || 'theme1';
             applyTheme(savedTheme);
         });
 
+        // Error Modal Logic
         const errorModal = document.getElementById('errorModal');
         document.getElementById('closeErrorModal').addEventListener('click', () => errorModal.classList.remove('active'));
 
@@ -1482,6 +1486,7 @@
             errorModal.classList.add('active');
         }
 
+        // Initialize Confetti
         document.addEventListener('DOMContentLoaded', () => {
             const canvas = document.getElementById('confetti-canvas');
             if (canvas) confetti = new JSConfetti({ canvas });
@@ -1680,9 +1685,15 @@
         const confidenceFill = document.getElementById('confidenceFill');
         const confidenceText = document.getElementById('confidenceText');
 
+        const numberColors = {
+            0: 'red', 2: 'red', 4: 'red', 6: 'red', 8: 'red',
+            1: 'green', 3: 'green', 5: 'green', 7: 'green', 9: 'green'
+        };
         const bigNumbers = [5, 6, 7, 8, 9];
         const smallNumbers = [0, 1, 2, 3, 4];
-        
+        const RED_NUMBERS = [0, 2, 4, 6, 8];
+        const GREEN_NUMBERS = [1, 3, 5, 7, 9];
+
         let lastPeriodNumber = null;
         let history = [];
         let pendingResult = null;
@@ -1770,58 +1781,85 @@
                 return [];
             }
         }
-        
+
+        function getOppositeNumbers(color, size) {
+            const oppositeColor = color === 'red' ? 'green' : 'red';
+            const oppositeSize = size === 'BIG' ? 'SMALL' : 'BIG';
+            
+            const oppositeColorNumbers = oppositeColor === 'red' ? RED_NUMBERS : GREEN_NUMBERS;
+            const oppositeSizeNumbers = oppositeSize === 'BIG' ? bigNumbers : smallNumbers;
+
+            const filtered = oppositeColorNumbers.filter(num => oppositeSizeNumbers.includes(num));
+
+            if (filtered.length < 2) {
+                return [oppositeColorNumbers[0], oppositeColorNumbers[1] || oppositeColorNumbers[0]];
+            }
+
+            const firstNum = filtered[Math.floor(Math.random() * filtered.length)];
+            let secondNum;
+            do {
+                secondNum = filtered[Math.floor(Math.random() * filtered.length)];
+            } while (secondNum === firstNum && filtered.length > 1);
+
+            return [firstNum, secondNum].sort((a, b) => a - b);
+        }
+
+        function checkNumberWin(predictedNumbers, actualNumber) {
+            return predictedNumbers.includes(actualNumber);
+        }
+
         async function generatePrediction(period) {
+            const existingEntry = history.find(entry => entry.period === period);
+            if (existingEntry && existingEntry.status !== 'PENDING') return;
+
             currentPredictionElement.textContent = 'PROCESSING...';
-            let predictionType = 'WAITING...';
+            let predictionCategory = 'WAITING...';
+            let predictedNumbers = ['N/A', 'N/A'];
             let confidence = 0;
 
             try {
                 const recentResults = await fetchLastResultsFromAPI();
-                
-                // Corrected Logic: Check for loss streak first
-                if (lossStreak === 3) {
-                    const lastPrediction = history.length > 0 ? history[0].type : null;
-                    if (lastPrediction === 'BIG') {
-                        predictionType = 'SMALL';
-                    } else if (lastPrediction === 'SMALL') {
-                        predictionType = 'BIG';
-                    } else {
-                        // Fallback in case of unexpected last prediction type
-                        predictionType = 'BIG'; 
-                    }
-                    confidence = Math.floor(Math.random() * 10) + 90;
-                    showNotification('opposite-mode', '3 LOSSES! NEXT PREDICTION IS OPPOSITE.');
-                } else if (recentResults.length >= 2) {
-                    // Normal prediction logic
-                    const firstRecentNumber = parseInt(String(recentResults[0].number), 10);
-                    const secondRecentNumber = parseInt(String(recentResults[1].number), 10);
-                    const sumOfNumbers = firstRecentNumber + secondRecentNumber;
-                    const finalDigit = sumOfNumbers % 10;
+                if (recentResults.length > 0) {
+                    const lastResult = recentResults[0];
+                    const previousPeriodNumber = parseInt(String(lastResult.issueNumber).slice(-1), 10);
+                    const previousResultNumber = parseInt(String(lastResult.number).slice(-1), 10);
                     
-                    if (finalDigit >= 5) {
-                        predictionType = 'BIG';
+                    const sum = previousPeriodNumber + previousResultNumber;
+                    const finalDigit = sum % 10;
+                    
+                    let logicSize;
+                    if (finalDigit > 4) {
+                        logicSize = 'BIG';
                     } else {
-                        predictionType = 'SMALL';
+                        logicSize = 'SMALL';
                     }
+                    const logicColor = numberColors[finalDigit];
+
+                    // Opposite Logic
+                    predictionCategory = logicSize === 'BIG' ? 'SMALL' : 'BIG';
+                    predictedNumbers = getOppositeNumbers(logicColor, logicSize);
                     confidence = Math.floor(Math.random() * 10) + 90;
+
                 } else {
-                    predictionType = 'NO DATA';
+                    predictionCategory = 'NO DATA';
+                    predictedNumbers = ['N/A', 'N/A'];
                     confidence = 0;
                 }
 
-                currentPredictionElement.textContent = predictionType;
+                currentPredictionElement.innerHTML = `${predictionCategory} | (${predictedNumbers.join(', ')})`;
                 confidenceFill.style.strokeDashoffset = 314 - (314 * confidence / 100);
                 confidenceText.textContent = `${confidence}%`;
 
-                const existingEntry = history.find(entry => entry.period === period);
                 if (existingEntry) {
-                    existingEntry.type = predictionType;
-                } else if (predictionType !== 'WAITING...' && predictionType !== 'NO DATA') {
+                    existingEntry.category = predictionCategory;
+                    existingEntry.numbers = predictedNumbers;
+                } else if (predictionCategory !== 'WAITING...') {
                     history.unshift({
                         period,
-                        type: predictionType,
+                        category: predictionCategory,
+                        numbers: predictedNumbers,
                         status: 'PENDING',
+                        isNumberWin: false
                     });
                     if (history.length > 100) history.pop();
                 }
@@ -1842,16 +1880,15 @@
 
             if (latest && latest.issueNumber === period) {
                 const actualNumber = parseInt(latest.number, 10);
-                let isWin = false;
-                let actualCategory = '';
+                const actualCategory = bigNumbers.includes(actualNumber) ? 'BIG' : 'SMALL';
 
-                const actualSize = bigNumbers.includes(actualNumber) ? 'BIG' : 'SMALL';
-                isWin = pendingResult.type === actualSize;
-                actualCategory = actualSize;
+                const isWin = pendingResult.category === actualCategory;
+                const isNumberWin = checkNumberWin(pendingResult.numbers, actualNumber);
 
                 pendingResult.status = isWin ? 'WIN' : 'LOSS';
                 pendingResult.apiCategory = actualCategory;
                 pendingResult.apiNumber = actualNumber;
+                pendingResult.isNumberWin = isNumberWin;
 
                 if (isWin) {
                     winStreak++;
@@ -1870,7 +1907,11 @@
                             }, 2000);
                         });
                     }
-                    showNotification('win', `WIN! WIN STREAK: ${winStreak}`);
+                    if (isNumberWin) {
+                        showNotification('win', 'WIN + JK!');
+                    } else {
+                        showNotification('win', `WIN! WIN STREAK: ${winStreak}`);
+                    }
                 } else {
                     winStreak = 0;
                     totalLosses++;
@@ -1878,7 +1919,6 @@
                     showLossAnimation();
                     showNotification('loss', `LOSS! WIN STREAK: ${winStreak}`);
                 }
-                
                 renderHistory();
                 pendingResult = null;
             }
@@ -1895,7 +1935,10 @@
             }
             const renderedHistory = history.map(h => {
                 const statusClass = h.status === 'PENDING' ? 'pending' : (h.status === 'WIN' ? 'win' : 'loss');
-                const winBadge = h.status === 'WIN' ? `<div class="win-badge">WIN</div>` : '';
+                const statusIcon = h.status === 'PENDING' ? `<span class="pending-spinner"></span>` :
+                    h.status === 'WIN' ? `<span class="win-trophy"></span>` :
+                    `<span class="loss-signal"></span>`;
+                const winBadge = h.status === 'WIN' ? `<div class="win-badge ${h.isNumberWin ? 'win-jk-badge' : ''}">${h.isNumberWin ? 'WIN + JK' : 'WIN'}</div>` : '';
                 return `
                     <div class="history-item ${statusClass}">
                         ${winBadge}
@@ -1903,9 +1946,10 @@
                             <i class="fas ${h.status === 'WIN' ? 'fa-check-circle text-green-500' : (h.status === 'LOSS' ? 'fa-times-circle text-red-500' : 'fa-hourglass-half text-yellow-500')} text-2xl"></i>
                             <div>
                                 <p class="font-semibold">PERIOD: ${h.period.slice(-5)}</p>
-                                <p class="text-sm">PREDICTION: ${h.type} | ACTUAL: ${h.status === 'PENDING' ? '?' : `${h.apiCategory} | NO: ${h.apiNumber}`}</p>
+                                <p class="text-sm">PRED: ${h.category} | (${h.numbers.join(', ')}) | ACTUAL: ${h.status === 'PENDING' ? '?' : `${h.apiCategory} | NO: ${h.apiNumber}`}</p>
                             </div>
                         </div>
+                        <span class="text-sm font-bold">${h.status || 'PENDING'}</span>
                     </div>`;
             }).join("");
             historyBody.innerHTML = renderedHistory;
