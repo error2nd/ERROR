@@ -1779,16 +1779,16 @@
             try {
                 const recentResults = await fetchLastResultsFromAPI();
                 
-                if (lossStreak === 3 && history.length > 0) {
-                    // Rule: 3 consecutive losses, next prediction is opposite
-                    const lastPrediction = history[0].type;
+                // Corrected Logic: Check for loss streak first
+                if (lossStreak === 3) {
+                    const lastPrediction = history.length > 0 ? history[0].type : null;
                     if (lastPrediction === 'BIG') {
                         predictionType = 'SMALL';
                     } else if (lastPrediction === 'SMALL') {
                         predictionType = 'BIG';
                     } else {
-                         // Fallback in case of unexpected last prediction type
-                         predictionType = 'BIG'; 
+                        // Fallback in case of unexpected last prediction type
+                        predictionType = 'BIG'; 
                     }
                     confidence = Math.floor(Math.random() * 10) + 90;
                     showNotification('opposite-mode', '3 LOSSES! NEXT PREDICTION IS OPPOSITE.');
@@ -1877,10 +1877,6 @@
                     lossStreak++;
                     showLossAnimation();
                     showNotification('loss', `LOSS! WIN STREAK: ${winStreak}`);
-                }
-
-                if (lossStreak >= 4) {
-                    lossStreak = 0;
                 }
                 
                 renderHistory();
